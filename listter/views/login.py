@@ -7,7 +7,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
-from django.shortcuts import render_to_response
+from django.shortcuts import redirect, render, render_to_response
 
 from listter.models import Profile
 
@@ -53,7 +53,7 @@ def twitter_logout(request):
     # Log a user out using Django's logout function and redirect them
     # back to the homepage.
     logout(request)
-    return HttpResponseRedirect('/')
+    return redirect('top')
 
 
 def twitter_authenticated(request):
@@ -113,4 +113,4 @@ def twitter_authenticated(request):
                         password=access_token['oauth_token_secret'])
     login(request, user)
 
-    return HttpResponseRedirect('/listter/')
+    return redirect('top')
