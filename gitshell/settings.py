@@ -54,7 +54,8 @@ else:
 
 INSTALLED_APPS = [
     'listter.apps.ListterConfig',
-    'vainlab.apps.VainlabConfig',
+    'vainlab',
+    # 'django.contrib.sites',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -64,6 +65,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    # 'subdomains.middleware.SubdomainURLRoutingMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -74,6 +76,10 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'gitshell.urls'
+# SUBDOMAIN_URLCONFS = {
+#     None: 'gitshell.urls',
+#     'vainlab': 'gitshell.urls.vainlab',
+# }
 
 TEMPLATES = [
     {
