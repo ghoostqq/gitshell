@@ -6,6 +6,27 @@
 </head>
 <body>
   Lists
+  {{ user.profile.screen_name }}
+  {% if debug %}
+    <br>{{ user.profile.oauth_token }}
+    <br>{{ user.profile.oauth_secret }}
+  {% endif %}
+  <br>{{ lists | length }}
+  {% for list in lists %}
+  <br>{{ list.name }}
+  {% endfor %}
+
+  <h4>{{ friends.ids | length }} Friends</h4>
+
+  {% for f in rich_friends %}
+  <br>{{ f.name }} @{{ f.screen_name }}
+  <br>{{ f.location }}
+  <br>{{ f.description }}
+  <br>{{ f.url }}
+  <br><img src="{{ f.profile_image_url_https }}">
+  <br>{{ f.status.text }}
+  {% endfor %}
+
 
 </body>
 </html>

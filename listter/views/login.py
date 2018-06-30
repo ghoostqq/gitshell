@@ -48,7 +48,7 @@ def twitter_login(request):
     return HttpResponseRedirect(url)
 
 
-@login_required
+@login_required(login_url='top')
 def twitter_logout(request):
     # Log a user out using Django's logout function and redirect them
     # back to the homepage.
@@ -102,7 +102,7 @@ def twitter_authenticated(request):
         # Save our permanent token and secret for later.
         profile = Profile()
         profile.user = user
-        Profile.screen_name = access_token['screen_name']
+        profile.screen_name = access_token['screen_name']
         profile.oauth_token = access_token['oauth_token']
         profile.oauth_secret = access_token['oauth_token_secret']
         profile.save()
@@ -113,4 +113,4 @@ def twitter_authenticated(request):
                         password=access_token['oauth_token_secret'])
     login(request, user)
 
-    return redirect('top')
+    return redirect('lists')

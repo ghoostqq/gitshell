@@ -53,7 +53,7 @@ else:
 # Application definition
 
 INSTALLED_APPS = [
-    'listter.apps.ListterConfig',
+    'listter',
     'vainlab',
     # 'django.contrib.sites',
     'django.contrib.admin',
