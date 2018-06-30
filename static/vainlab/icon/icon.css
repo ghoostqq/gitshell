@@ -1,0 +1,24 @@
+.icon {
+    display: inline-block;
+    height: 1em;
+    width: auto;
+    background-repeat: no-repeat;
+}
+
+/*
+.icon-duration {
+    background-image: url('duration.svg');
+}
+.icon-turrets {
+    background-image: url('turrets.svg');
+}
+.icon-cs {
+    background-image: url('cs.svg');
+}
+.icon-kills {
+    background-image: url('kills.svg');
+}
+.icon-gold {
+    background-image: url('gold.svg');
+}
+*/

@@ -17,8 +17,10 @@ from django.contrib import admin
 from django.urls import include, path
 
 from listter import urls as listter_urls
+from vainlab import urls as vainlab_urls
 
 urlpatterns = [
     path('listter/', include(listter_urls)),
+    path('vainlab/', include(vainlab_urls)),
     path('admin/', admin.site.urls),
 ]

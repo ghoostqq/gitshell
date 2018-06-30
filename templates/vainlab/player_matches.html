@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block custom_css %}
+<link href="{% static 'vainlab/style.css' %}" rel="stylesheet">
+<link href="{% static 'vainlab/sprite/hero-32.css' %}" rel="stylesheet">
+<link href="{% static 'vainlab/sprite/hero-116-80.css' %}" rel="stylesheet">
+<link href="{% static 'vainlab/sprite/items-48-38.css' %}" rel="stylesheet">
+{% endblock %}
+
+
+{% block content %}
+{# error #}
+{# player #}
+
+
+<div class="matches-main">
+
+  <!-- Header -->
+  <div class="header">
+    <a href="{% url 'index' %}">
+      <img src="{% static 'vainlab/vainlab-logo_pink.svg' %}">
+    </a>
+    <div class="search-form">
+      {% include "vainlab/search-ign.html" %}
+    </div>
+  </div>
+
+
+  <div class="all-matches">
+    {% if matches.errors %} <p>Error: {# matches.errors #}</p>
+    {% else %}
+
+    <!-- Player card -->
+    <div class="player-info">
+      <div class="player-tier" style="background-image: url( {% static 'vainlab/tiers-cropped/t'|add:player.tier_str|add:'.png' %} );">
+        <div class="player-name-stats">
+          <h1 id="player-name">{{ player.name }}</h1>
+          <p>
+          ELO: {{ player.elo }}<br>
+          勝利数: {{ player.wins }}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Matches -->
+    {% for m in matches %}
+    <div class="single-match">
+      {% include "vainlab/_match.html" %}
+    </div>
+    {% endfor %}
+    {% endif %}
+  </div>
+
+  <div class="footer">
+    {% include "vainlab/footer.html" %}
+  </div>
+</div>
+
+{% endblock %}

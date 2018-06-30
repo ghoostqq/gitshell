@@ -1,0 +1,76 @@
+{% load static %}
+
+{% for pa in m.participant_set.iterator %}
+{% if pa.player == player %}
+      <div class="m-summary">
+        <div class="role">
+          <div class="won" style="background-color: {% if pa.won %}#ffce2d{% else %}#888888{% endif %};">
+            <!--
+            <img class="hero" src="{% static 'vainlab/hero-116/'|add:pa.actor_strip|add:'_Portrait.png' %}">
+            -->
+            <i class="sprite-hero-116-80-{{ pa.actor_strip }}_Portrait hero"></i>
+          </div>
+        </div>
+        <div class="mode-won">
+          <span class="mw-mode">{{ m.mode_ja }}</span>
+          <span class="mw-won">{{ pa.won_ja }}</span>
+        </div>
+      </div>
+
+
+
+      <div class="m-details">
+        <!-- Items -->
+        <div class="item-build-wrapper">
+          <div class="item-build">
+            {% for item in pa.items_list %}
+            <div class="single-item">
+              <!-- img src="{% static 'vainlab/items-48/'|add:item|add:'.png' %}" -->
+              <i class="sprite-items-48-38-{{ item }}"></i>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+
+        <!-- Player stats -->
+        <div class="player-stats">
+          <div class="kda">
+            <dt>KDA:</dt>
+            <dd>
+            <img class="icon" src="{% static 'vainlab/icon/kills.svg' %}">{{ pa.kda }}
+            ({{ pa.kills }}/{{ pa.deaths }}/{{ pa.assists }})</dd>
+          </div>
+          <div class="gold">
+            <dt>Gold:</dt>
+            <dd><img class="icon" src="{% static 'vainlab/icon/gold.svg' %}">{{ pa.gold }}</dd>
+          </div>
+          <div class="cs">
+            <dt>CS:</dt>
+            <dd><img class="icon" src="{% static 'vainlab/icon/cs.svg' %}">{{ pa.farm }}</dd>
+          </div>
+          {# <img class="icon" src="{% static 'vainlab/icon/duration.svg' %}">{{ m.duration }} #}
+        </div>
+
+        <!-- Rosters -->
+        <div class="rosters">
+          {% for r in m.roster_set.iterator %}
+          <div class="roster {{ r.side_class }}" style="color: {{ r.side_color }};">
+            <div class="roster-stats">
+              <p>
+              <img class="icon" src="{% static 'vainlab/icon/kills.svg' %}">{{ r.team_kill_score }}
+              <img class="icon" src="{% static 'vainlab/icon/turrets.svg' %}">{{ r.turret_kill }}
+              </p>
+            </div>
+
+            <div class="roster-participants">
+              {% for pa in r.participant_set.iterator %}
+              <i class="sprite-hero-32-{{ pa.actor_strip }}_Portrait"></i>
+              {% endfor %}
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+{% endif %}
+{% endfor %}
+

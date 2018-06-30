@@ -1,0 +1,9 @@
+<h1>Players</h1>
+
+{% if top_players_list %}
+<ul>
+  {% for player in top_players_list %}
+  <li>{{ player.name }} {{ player.elo }}</li>
+  {% endfor %}
+</ul>
+{% endif %}

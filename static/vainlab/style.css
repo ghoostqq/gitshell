@@ -1,0 +1,473 @@
+html, body {
+  background: #eee;
+  height: 100%;
+}
+
+/* search-form */
+input, button {
+    margin: 0;
+    padding: 0;
+    background: none;
+    border: none;
+    appearance: none;
+}
+#search-ign {
+    display: flex;
+    flex-direction: row;
+
+    border-radius: 8px;
+
+    box-shadow: 1px 1px 2px 1px rgba(0,0,0,0.2);
+}
+#search-ign input {
+    background: #fff;
+    width: 16em;
+    height: 2em;
+
+    padding-left: 4px;
+    border-radius: 8px 0 0 8px;
+}
+#search-ign button {
+    background: #feb3a8;
+    width: 3em;
+    height: 2em;
+
+    padding-right: 2px;
+    border-radius: 0 8px 8px 0;
+
+    cursor: pointer;
+}
+/* end search-ign */
+
+/* icons of kda, cs, duration, gold, turrets */
+img.icon {
+    display: inline-block;
+    height: 1em;
+    width: auto;
+    padding: 0 2.5px 2.5px;
+    background-repeat: no-repeat;
+}
+
+.vainlab-container {
+  background: #eee;
+
+  display: flex;
+  flex-direction: column;
+
+  justify-content: center;
+  align-items: center;
+
+  min-height: 100%;
+}
+.vainlab-logo {
+  flex: 1 0 auto;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+.vainlab-logo img {
+  width: 300px;
+  height: 300px;
+  margin: 20px 0px 16px;
+}
+.vainlab-container .search-form {
+  flex: 0 1 auto;
+
+  text-align: center;
+}
+.vainlab-description {
+  flex: 1 0 auto;
+  margin-top: 16px;
+
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+.vainlab-description p {
+    margin: 12px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  text-align: center;
+  background-color: #fff;
+  width: 176px;
+  height: 176px;
+  border-radius: 50%;
+}
+.line-height-larger {
+    font-weight: bolder;
+    line-height: 2.2em;
+}
+
+
+.matches-main {
+  background: #eee;
+
+  display: flex;
+  flex-direction: column;
+}
+.header {
+    background: #fff;
+    flex: 0 0 auto;
+
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    min-height: 50px;
+    box-shadow: 0 2px 4px 2px rgba(0,0,0,0.05);
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+}
+.matches-main .header img {
+    height: 36px;
+}
+.all-matches {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.player-info {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: flex-end;
+
+    max-width: 780px;
+
+    background: #fff no-repeat;
+    border-radius: 8px;
+    box-shadow: 1px 1px 2px 2px rgba(0,0,0,0.05);
+    margin: 8px 8px 0;
+}
+.player-info .player-tier {
+    width: 600px;
+    height: 160px;
+    border-radius: inherit;
+}
+.player-name-stats {
+    flex: 0 0 auto;
+
+    text-align: right;
+    text-shadow: 
+    rgba(255,255,255,0.3) 2px 0px  2px, rgba(255,255,255,0.3) -2px 0px 2px,
+    rgba(255,255,255,0.3) 0px -2px 2px, rgba(255,255,255,0.3)  -2px 0px 2px,
+    rgba(255,255,255,0.3) 2px 2px  2px, rgba(255,255,255,0.3) -2px 2px 2px,
+    rgba(255,255,255,0.3) 2px -2px 2px, rgba(255,255,255,0.3)  -2px -2px 2px,
+    rgba(255,255,255,0.3) 1px 2px  2px, rgba(255,255,255,0.3) -1px 2px 2px,
+    rgba(255,255,255,0.3) 1px -2px 2px, rgba(255,255,255,0.3)  -1px -2px 2px,
+    rgba(255,255,255,0.3) 2px 1px  2px, rgba(255,255,255,0.3) -2px 1px 2px,
+    rgba(255,255,255,0.3) 2px -1px 2px, rgba(255,255,255,0.3)  -2px -1px 2px;
+    padding-right: 8px;
+}
+span#player-name {
+    font-size: xx-large;
+}
+
+.single-match {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    min-width: 300px;
+
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 1px 1px 2px 2px rgba(0,0,0,0.05);
+    margin: 4px 8px 0; /* top side bott */
+}
+.m-summary {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    margin: 4px;
+}
+.won {
+    /* background-color is defined in html */
+    height: 128px;
+    width: 128px;
+    border-radius: 64px;
+    border-bottom-right-radius: 16px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.hero {
+    height: 116px;
+    border-radius: 50%;
+}
+.mode-won {
+    margin: 2px;
+    display: flex;
+}
+.mw-mode, .mw-won {
+    font-size: xx-small;
+    font-weight: bolder;
+    background: #bbb;
+    color: #fff;
+    text-shadow: 0.5px 0.5px 1px rgba(0,0,0,0.2);
+}
+.mw-mode {
+    padding-left: 4px;
+    border-radius: 8px 0 0 8px;
+}
+.mw-won {
+    padding-right: 4px;
+    border-radius: 0 8px 8px 0;
+}
+.m-details {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+}
+/*
+@media all and (max-width: 500px) {
+    .m-details {
+        flex-direction: column;
+    }
+}
+*/
+.item-build-wrapper {
+    /* no size change as flex item */
+    flex: 0 1 316px;
+
+    display: flex;
+    align-items: center;
+}
+.item-build {
+    flex 0 1;
+    /* flex box */
+    display: flex;
+    flex-direction: row;
+    padding: 2px;
+    background-color: #eee;
+    box-shadow: 0.5px 0.5px 1px 1px rgba(0,0,0,0.05) inset;
+    border-radius: 37px;
+    height: 64+10px;
+    width: 316px;
+}
+.single-item {
+    margin: 2px;
+}
+.single-item img {
+    width: 48px;
+    height: 48px;
+}
+.player-stats {
+    flex: 1 0;
+
+    display: flex;
+    flex-direction: column;
+
+    min-width: 160px;
+}
+.player-stats > div {
+    display: flex;
+    flex-direction: row;
+    
+}
+.rosters {
+    flex: 1;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+
+    width: 160px;
+}
+.roster {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.roster-stats {}
+.roster-participants i {
+    border-radius: 50%;
+    margin: 2px;
+}
+
+/* Footer */
+.footer {
+    flex: 0 0 auto;
+    height: 40px;
+    width: 100%;
+    margin-top: 8px;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+
+    background: #333;
+    color: #eee;
+}
+.footer a {
+    color: #eee;
+    font-weight: lighter;
+}
+
+
+/* Common Usable Definitions */
+.bg-gray {
+  background: #eee;
+}
+.h-36 {
+  height: 36px;
+}
+.m-7 {
+  margin: 7px;
+}
+.w-100p {
+  width: 100%;
+}
+.w-min-300 {
+  min-width: 300px;
+}
+.w-min-250 {
+  min-width: 250px;
+}
+.circle {
+  border-radius: 50%;
+}
+.card {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 1px 1px 2px 2px rgba(0,0,0,0.05);
+    margin: 4px 8px 0; /* top side bott */
+    padding: 6px;
+}
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+.container {
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+
+  min-height: 100%;
+}
+.flex-column {
+    display: flex;
+    flex-direction: column;
+}
+.flex-row {
+    display: flex;
+    flex-direction: row;
+}
+.flex-justify-center {
+    justify-content: center;
+}
+.flex-justify-between {
+    justify-content: space-between;
+}
+.flex-justify-around {
+    justify-content: space-around;
+}
+.flex-align-center {
+    align-items: center;
+}
+.flex-align-stretch {
+    align-items: stretch;
+}
+
+
+
+
+/* All above are widest mode settings
+ * Here we set for shallower cases
+ */
+@media all and (max-width: 780px) {
+    .rosters {
+        display: none;
+    }
+}
+@media all and (max-width: 650px) {
+    .container {
+        max-width: 440px;
+    }
+    .player-info {
+    }
+    .player-info .player-tier {
+        flex: 2 1 500px;
+        width: 440px;
+    }
+    .player-name-stats {
+        flex: 0 0 auto;
+    }
+
+    .player-stats {
+        flex-direction: row;
+        justify-content: space-around;
+
+        min-width: unset;
+    }
+    .player-stats > div {
+        flex-direction: column;
+    }
+}
+@media all and (max-width: 460px) {
+    .container {
+      padding-right: 5px;
+      padding-left: 5px;
+      margin-right: auto;
+      margin-left: auto;
+        max-width: 380px;
+    }
+    .player-info {
+    }
+    .player-info .player-tier {
+        width: 344px;
+    }
+    span#player-name {
+        font-size: x-large;
+    }
+
+    .m-summary {
+        margin: 2px;
+    }
+    .won {
+        height: 88px;
+        width: 88px;
+        border-radius: 50%;
+        border-bottom-right-radius: 12.5%;
+    }
+    img.hero {
+        height: 80px;
+        border-radius: 50%;
+    }
+
+    .item-build-wrapper {
+        flex: 0 1 242px;
+
+        margin-top: 4px;
+    }
+    .item-build {
+        width: 242px;
+        height: 38+2+2px;
+
+        padding: 1px;
+    }
+    .single-item {
+        margin: 1px;
+    }
+    .single-item img {
+        width: 38px;
+        height: 38px;
+    }
+}

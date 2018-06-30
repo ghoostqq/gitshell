@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block custom_css %}
+<link href="{% static 'vainlab/sprite/hero-64.css' %}" rel="stylesheet">
+<link href="{% static 'vainlab/style.css' %}" rel="stylesheet">
+{% endblock %}
+
+
+{% block content %}
+
+<div class="wrapper">
+
+  <!-- Header -->
+  <div class="">
+    <div class="header">
+      <a href="{% url 'index' %}">
+        <img src="{% static 'vainlab/vainlab-logo_pink.svg' %}" class="h-36 m-7">
+      </a>
+      <div class="search-form m-7">
+        {% include "vainlab/search-ign.html" %}
+      </div>
+    </div>
+  </div>
+
+
+  <div class="container">
+    <div class="flex-column flex-center" id="rankings">
+      {% for _, r in rankings %}
+      <div class="flex-row card flex-align-center w-min-250 flex-justify-around">
+        <i class="sprite-hero-64-{{ r.actor }}_Portrait circle"></i>
+        <span>{{ r.actor }}</span>
+        勝率 {{ r.win_rate }}%
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+
+  <div class="">
+    <div class="footer">
+      {% include "vainlab/footer.html" %}
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}

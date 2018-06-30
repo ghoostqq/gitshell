@@ -1,0 +1,9 @@
+<form id="search-ign" action="{% url 'search_player' %}" method="post">
+  {% csrf_token %}
+  {{ form }}
+  <button type="submit" name="action" value="send"><i class="fas fa-search" title="検索"></i></button>
+  <!--
+  <input class="input-ign" name="ign" type="text" placeholder="プレイヤー名を入力" onfocus="this.placeholder=''" onblur="this.placeholder='プレイヤー名を入力'">
+  <button type="submit" name="action" value="send"><i class="fas fa-search" title="検索"></i></button>
+  -->
+</form>

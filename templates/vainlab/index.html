@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title_description %}
+<title>VainLab | Vainglory ゲーム履歴を表示・分析・共有しよう</title>
+<meta name="apple-mobile-web-app-title" content="VainLab">
+<meta name="description" content="VainLab 【ベインラボ】 Vainglory API を用いた分析ツールで、ゲーム履歴を表示・共有したり、統計分析で勝率アップを目指そう！">
+<!-- favicon & touch-icon -->
+<link rel="icon" href="{% static 'vainlab/favicon-64.png' %}">
+<link rel="apple-touch-icon" href="{% static 'vainlab/apple-touch-icon.png' %}">
+<link rel="mask-icon" size="any" href="{% static 'vainlab/pinned-icon.svg' %}" color="#333">
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@VainLab">
+<meta name="twitter:creator" content="@qiugits">
+<meta name="twitter:title" content="VainLab【ベインラボ】Vaingloryデータ分析・共有サイト">
+<meta name="twitter:description" content="VainLab (ベインラボ) はVaingloryの試合データをオンラインで振り返り・分析・共有するためのWebアプリです。プレイヤー名でゲーム履歴を検索、データベースから統計分析で勝利へのヒントを提供することを目指します。">
+<meta name="twitter:image" content="{% static 'vainlab/vainlab-twitter-card.png' %}">
+{% endblock %}
+
+{% block custom_css %}
+<link href="{% static 'vainlab/style.css' %}" rel="stylesheet">
+{% endblock %}
+
+
+{% block content %}
+<div class="vainlab-container">
+
+  <!-- Header -->
+  <div class="header w-100p flex-align-center">
+    <div>VainLab</div>
+    <div>
+      <a href="{% url 'rankings' %}">Ranking</a>
+    </div>
+  </div>
+
+
+  <div class="vainlab-logo">
+    <img src="{% static 'vainlab/vainlab-logo_pink.svg' %}">
+  </div>
+
+  <div class="search-form">
+    {% include "vainlab/search-ign.html" %}
+    <a href="http://gamelocker.unite.gg" target="_blunk">API稼働状況</a>
+    | <a href="{% url 'player_matches' 'Qiuqiu' %}">Demo</a>
+  </div>
+
+  <div class="useful-links">
+  </div>
+
+  <div class="vainlab-description">
+    <p><span>
+      <span class="line-height-larger"><strong>VainLab β版</strong></span><br>
+      VaingloryAPIを用いた<br>
+      統計分析ツール
+    </span></p>
+
+    <p><span>
+      <span class="line-height-larger">β版の機能</span><br>
+      特定プレイヤーの<br>
+      試合結果の一覧表示
+    </span></p>
+
+    <p><span>
+      <span class="line-height-larger">実装予定の機能</span><br>
+      試合結果全体の<br>
+      統計的分析など
+    </span></p>
+  </div>
+
+  <div class="footer">
+    {% include "vainlab/footer.html" %}
+  </div>
+</div>
+
+{% endblock %}
