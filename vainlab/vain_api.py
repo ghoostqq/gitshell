@@ -51,13 +51,18 @@ class VainAPI:
             }
         return wrapped
 
-    def player_matches(self, reg, ign):
+    def player_matches(self, reg, ign, debug=False):
         url = f'https://api.dc01.gamelockerapp.com/shards/{reg}/matches'
         params = {
             'filter[playerNames]': [ign],
             'sort': '-createdAt',
         }
         res = self.request(url, params)
+
+        if debug:
+            with open('./tmp', 'w') as f:
+                json.dump(res, f, indent=4)
+            return res
 
         # Exit if error
         if res.get('errors', ''):
@@ -103,34 +108,39 @@ class VainAPI:
                     name=i['attributes']['name'],
                     # slug=i['attributes']['name'],
                     shard=i['attributes']['shardId'],
-                    elo=i['attributes']['stats']['rankPoints']['ranked'],
-                    tier=i['attributes']['stats']['skillTier'],
-                    wins=i['attributes']['stats']['wins'],
+                    elo=i['attributes']['stats'].get(
+                        'rankPoints', {'ranked': 0})['ranked'],
+                    tier=i['attributes']['stats'].get('skillTier', 0),
+                    wins=i['attributes']['stats'].get('wins', 0),
                 )
                 p.save()
         # Participant -> Roster, Player
         for i in res['included']:
             if i['type'] == 'participant':
-                p = Participant(
-                    id=i['id'],
-                    # Assuming like '*Vox*' -> 'Vox'
-                    actor=i['attributes']['actor'][1:-1],
-                    shard=i['attributes']['shardId'],
-                    kills=i['attributes']['stats']['kills'],
-                    deaths=i['attributes']['stats']['deaths'],
-                    assists=i['attributes']['stats']['assists'],
-                    # kda
-                    gold=i['attributes']['stats']['gold'],
-                    farm=i['attributes']['stats']['farm'],
-                    items=json.dumps(i['attributes']['stats']
-                                     ['items'][::-1][:6][::-1]),
-                    tier=i['attributes']['stats']['skillTier'],
-                    won=i['attributes']['stats']['winner'],
-                    player_id=i['relationships']['player']['data']['id'],
-                    match_id=ro2m[pa2r[i['id']]],
-                    roster_id=pa2r[i['id']],
-                )
-                p.save()
+                # TODO: Do not use try and detect error individually
+                try:
+                    p = Participant(
+                        id=i['id'],
+                        # Assuming like '*Vox*' -> 'Vox'
+                        actor=i['attributes']['actor'][1:-1],
+                        shard=i['attributes']['shardId'],
+                        kills=i['attributes']['stats'].get('kills', 0),
+                        deaths=i['attributes']['stats'].get('deaths', 0),
+                        assists=i['attributes']['stats'].get('assists', 0),
+                        # kda
+                        gold=i['attributes']['stats'].get('gold', 0),
+                        farm=i['attributes']['stats'].get('farm', 0),
+                        items=json.dumps(i['attributes']['stats']
+                                         .get('items', [])[::-1][:6][::-1]),
+                        tier=i['attributes']['stats'].get('skillTier', 0),
+                        won=i['attributes']['stats'].get('winner', False),
+                        player_id=i['relationships']['player']['data']['id'],
+                        match_id=ro2m[pa2r[i['id']]],
+                        roster_id=pa2r[i['id']],
+                    )
+                    p.save()
+                except:
+                    continue
         # Matches =(many-to-many)=> Players
         for m in matches:
             for r in m.roster_set.all():
