@@ -139,7 +139,7 @@ class VainAPI:
                         roster_id=pa2r[i['id']],
                     )
                     p.save()
-                except:
+                except Exception:
                     continue
         # Matches =(many-to-many)=> Players
         for m in matches:

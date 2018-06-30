@@ -16,6 +16,8 @@ MODE_JA = {
     'private_party_aral_match':         'プラベ大乱闘',
     'private_party_blitz_match':        'プラベ電撃',
     'private_party_blitz_rounds_match': 'プラベガチンコ',
+    'private_party_vg_5v5':             'プラベ5V5カジュ',
+    'private_party_draft_match_5v5':    'プラベ5V5ドラフト',
     '5v5_pvp_casual':                   '5V5カジュ',
     '5v5_pvp_ranked':                   '5V5ランク',
 }
