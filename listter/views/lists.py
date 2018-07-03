@@ -23,7 +23,7 @@ consumer = oauth.Consumer(
 resource_urls = {
     # Lists
     'GET lists/list': 'https://api.twitter.com/1.1/lists/list.json',
-    'GET lists/members': '',
+    'GET lists/members': 'https://api.twitter.com/1.1/lists/members.json',
     'POST lists/members/create': '',
     'POST lists/members/create_all': '',
     'POST lists/members/destroy': '',
@@ -38,13 +38,14 @@ resource_urls = {
 
 @login_required(login_url='top')
 def listsView(request):
-    # GET lists/list
     token = oauth.Token(
         request.user.profile.oauth_token,
         request.user.profile.oauth_secret,
     )
     # token.set_verifier(request.GET['oauth_verifier'])
     client = oauth.Client(consumer, token)
+
+    # GET lists/list
     resp, content = client.request(resource_urls['GET lists/list'], "GET")
     if resp['status'] != '200':
         print(content)
@@ -52,6 +53,9 @@ def listsView(request):
     if content.__class__ is bytes:
         content = content.decode('ascii')
     lists = json.loads(content)
+    if settings.DEBUG:
+        with open('./example_lists.json', 'w') as f:
+            json.dump(lists, f, indent=4)
 
     resp, content = client.request(resource_urls['GET friends/ids'], "GET")
     if resp['status'] != '200':
@@ -74,4 +78,17 @@ def listsView(request):
         with open('./example_users_lookup.json', 'w') as f:
             json.dump(rich_friends, f, indent=4)
 
-    return render(request, 'listter/lists.html', {'lists': lists, 'friends': friends, 'rich_friends': rich_friends})
+    lists_members_url = resource_urls['GET lists/members'] + \
+        '?list_id=' + str(lists[0]['id'])
+    resp, content = client.request(lists_members_url, "GET")
+    if resp['status'] != '200':
+        print(content)
+        raise Exception("Invalid response from Twitter.")
+    if content.__class__ is bytes:
+        content = content.decode('ascii')
+    lists_members = json.loads(content)
+    if settings.DEBUG:
+        with open('./example_lists_members.json', 'w') as f:
+            json.dump(lists_members, f, indent=4)
+
+    return render(request, 'listter/lists.html', {'lists': lists, 'friends': friends, 'rich_friends': rich_friends, 'lists_members': lists_members})

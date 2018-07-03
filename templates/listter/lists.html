@@ -27,6 +27,11 @@
   <br>{{ f.status.text }}
   {% endfor %}
 
+  <h4>{{ lists_members.users | length }} List members</h4>
+  {% for user in lists_members.users %}
+  <br>{{ user.id }}
+  {% endfor %}
+
 
 </body>
 </html>
