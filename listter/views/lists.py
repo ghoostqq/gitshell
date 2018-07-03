@@ -2,6 +2,7 @@ import json
 import os
 
 import oauth2 as oauth
+import pandas as pd
 from django.conf import settings
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -78,8 +79,9 @@ def listsView(request):
         with open('./example_users_lookup.json', 'w') as f:
             json.dump(rich_friends, f, indent=4)
 
+    LIST_ID = lists[0]['id']
     lists_members_url = resource_urls['GET lists/members'] + \
-        '?list_id=' + str(lists[0]['id'])
+        '?list_id=' + str(LIST_ID)
     resp, content = client.request(lists_members_url, "GET")
     if resp['status'] != '200':
         print(content)
@@ -91,4 +93,10 @@ def listsView(request):
         with open('./example_lists_members.json', 'w') as f:
             json.dump(lists_members, f, indent=4)
 
-    return render(request, 'listter/lists.html', {'lists': lists, 'friends': friends, 'rich_friends': rich_friends, 'lists_members': lists_members})
+    friends_ids = [fid for fid in friends['ids']]
+    lists_members_ids = [usr['id'] for usr in lists_members['users']]
+    df = pd.DataFrame(index=friends_ids)
+    df[str(LIST_ID)] = df.index.map(lambda x: x in lists_members_ids)
+
+    return render(request, 'listter/lists.html', {
+        'lists': lists, 'friends': friends, 'rich_friends': rich_friends, 'lists_members': lists_members, 'df': df.to_json(orient='index')})

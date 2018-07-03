@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <title>Listter Lists</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
 </head>
 <body>
   Lists
@@ -31,6 +32,39 @@
   {% for user in lists_members.users %}
   <br>{{ user.id }}
   {% endfor %}
+
+
+
+  {# df #}
+
+  {% verbatim %}
+  <div id="app-7">
+    <table>
+      <tbody>
+        <tr v-for="(value, key) in membersLists">
+          <td >{{ key }}
+            <td v-for="v in value">
+              {{ v }}
+            </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  {% endverbatim %}
+
+<script type="text/javascript">
+var app7 = new Vue({
+  el: '#app-7',
+  data: {
+    membersLists: {
+      0: {text: 'Lemon'},
+      1: {text: 'Orange'},
+      2: {text: 'Cheese'},
+    }
+  }
+})
+</script>
+
 
 
 </body>
