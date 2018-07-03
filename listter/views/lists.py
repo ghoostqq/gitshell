@@ -54,6 +54,8 @@ def listsView(request):
     if content.__class__ is bytes:
         content = content.decode('ascii')
     lists = json.loads(content)
+    lists = [lst for lst in lists
+             if lst['user']['id_str'] == request.user.username]
     if settings.DEBUG:
         with open('./example_lists.json', 'w') as f:
             json.dump(lists, f, indent=4)
@@ -99,7 +101,7 @@ def listsView(request):
     df[str(LIST_ID)] = df.index.map(lambda x: x in lists_members_ids)
 
     return render(request, 'listter/lists.html', {
-        'lists': lists, 'friends': friends, 'rich_friends': rich_friends, 'lists_members': lists_members, 'df': df.to_json(orient='index')})
+        'lists': lists, 'friends': friends, 'rich_friends': rich_friends, 'lists_members': lists_members, 'df': df.to_json(orient='index'), })
 
 
 def post_lists(request):
@@ -118,8 +120,17 @@ def post_member(request):
     # token.set_verifier(request.GET['oauth_verifier'])
     client = oauth.Client(consumer, token)
 
-    lists_members_url = resource_urls['POST lists/members/create' if v else 'POST lists/members/destroy'] + \
+    if v:
+        base_url = resource_urls['POST lists/members/destroy']
+    else:
+        base_url = resource_urls['POST lists/members/create']
+    lists_members_url = base_url + \
         f'?user_id={user_id}&list_id={list_id}'
+    if settings.DEBUG:
+        print(v)
+        print('POST lists/members/create' if v else 'POST lists/members/destroy')
+        print(base_url)
+        print(lists_members_url)
     resp, content = client.request(lists_members_url, "POST")
     if resp['status'] != '200':
         print(content)

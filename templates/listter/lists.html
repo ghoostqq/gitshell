@@ -8,7 +8,9 @@
   <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
 </head>
 <body>
-  Lists
+  {{ tmp }}
+
+  <h1>Lists</h1>
   {{ user.profile.screen_name }}
   {% if debug %}
     <br>{{ user.profile.oauth_token }}
@@ -93,11 +95,12 @@ var app7 = new Vue({
         {
           user_id: user_id,
           list_id: list_id,
-          v: v,
+          v: v * 1,
         }
       ).then( function(response){
         console.log('success');
         console.log(response);
+        console.log(v * 1);
       }, function(response){
         console.log('falure');
       })
