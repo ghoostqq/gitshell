@@ -41,10 +41,10 @@
   <div id="app-7">
     <table>
       <tbody>
-        <tr v-for="(value, key) in membersLists">
-          <td >{{ key }}
-            <td v-for="v in value">
-              {{ v }}
+        <tr v-for="(member_value, member_id) in membersLists">
+          <td >{{ member_id }}
+            <td v-for="(v, list_id) in member_value">
+              <button v-on:click="toggleMember(member_id, list_id, v)">{{ v }}</button>
             </td>
         </tr>
       </tbody>
@@ -56,10 +56,15 @@
 var app7 = new Vue({
   el: '#app-7',
   data: {
-    membersLists: {
-      0: {text: 'Lemon'},
-      1: {text: 'Orange'},
-      2: {text: 'Cheese'},
+    membersLists: {{ df | safe}}
+  },
+  methods: {
+    toggleMember: function (id_name, list_name, current_value) {
+      this.membersLists[id_name][list_name] = !current_value
+      console.log('a');
+      console.log(id_name);
+      console.log(list_name);
+      console.log(current_value);
     }
   }
 })
