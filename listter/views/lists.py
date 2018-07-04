@@ -65,6 +65,10 @@ def listsView(request):
                            './example_lists.json')
     lists = [lst for lst in lists
              if lst['user']['id_str'] == request.user.username]
+    lists_lst = list()
+    for l in lists:
+        lists_lst.append(l['name'])
+    lists_lst = json.dumps(lists_lst)
 
     friends = client_request(client, resource_urls['GET friends/ids'], "GET",
                              './example_friends_ids.json')
@@ -84,18 +88,18 @@ def listsView(request):
         }
     friends_dic = json.dumps(friends_dic)
 
-    LIST_ID = lists[0]['id']
-    lists_members_url = resource_urls['GET lists/members'] + \
-        '?list_id=' + str(LIST_ID)
-    lists_members = client_request(client, lists_members_url, "GET",
-                                   './example_list_members.json')
-
     df = pd.DataFrame(index=friends_ids)
-    lists_members_ids = [usr['id'] for usr in lists_members['users']]
-    df[str(LIST_ID)] = df.index.map(lambda x: x in lists_members_ids)
+    for LIST_ID in [lst['id'] for lst in lists]:
+        lists_members_url = resource_urls['GET lists/members'] + \
+            '?list_id=' + str(LIST_ID)
+        lists_members = client_request(client, lists_members_url, "GET",
+                                       './example_list_members.json')
+
+        lists_members_ids = [usr['id'] for usr in lists_members['users']]
+        df[str(LIST_ID)] = df.index.map(lambda x: x in lists_members_ids)
 
     return render(request, 'listter/lists.html', {
-        'lists': lists, 'friends': friends, 'rich_friends': rich_friends, 'friends_dic': friends_dic, 'lists_members': lists_members, 'df': df.to_json(orient='index'), })
+        'lists': lists, 'lists_lst': lists_lst, 'friends': friends, 'rich_friends': rich_friends, 'friends_dic': friends_dic, 'lists_members': lists_members, 'df': df.to_json(orient='index'), })
 
 
 def post_lists(request):

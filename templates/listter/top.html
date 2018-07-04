@@ -1,18 +1,25 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8" />
-  <title>Hello</title>
-</head>
-<body>
+{% extends "listter/base.html" %}
+{% load static %}
+
+{% block content %}
+<div id="header">
   {% if user.is_authenticated %}
-  Logged in as {{ user }}
+  Logged in as {{ user.profile.screen_name }}
   <a href="{% url 'logout' %}">Logout</a>
   {% else %}
   Not logged in
   <a href="{% url 'login' %}">Login</a>
   {% endif %}
+</div>
 
-  Hello world!
-</body>
-</html>
+<div id="main">
+  <img src="{% static 'listter/TwListterLogo.jpeg' %}">
+
+  <h1><a href="{% url 'lists' %}">Enter</a></h1>
+</div>
+
+
+<div id="footer">
+</div>
+
+{% endblock %}

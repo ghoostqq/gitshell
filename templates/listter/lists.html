@@ -9,28 +9,26 @@
   <h1>Lists</h1>
   {{ user.profile.screen_name }}
   <br>{{ lists | length }} Lists
-  {% for list in lists %}
-  <br>{{ list.name }}
-  {% endfor %}
 
   <h4>{{ friends.ids | length }} Friends</h4>
 
 
-  <h4>{{ lists_members.users | length }} List members</h4>
-  {% for user in lists_members.users %}
-  <br>{{ user.id }}
-  {% endfor %}
-
-
   {% verbatim %}
   <div id="app-7">
-    <button v-on:click="postTable">POST</button>
     <table>
+      <thead>
+        <tr >
+          <td>Friends</td>
+          <td v-for="list_name in listsLst">
+            {{ list_name }}
+          </td>
+        </tr>
+      </thead>
       <tbody>
         <tr v-for="(member_value, member_id) in membersLists">
           <td >{{ friendsDic[member_id].name }}</td>
           <td v-for="(v, list_id) in member_value">
-            <button v-on:click="postMember(member_id, list_id, v)">{{ v }}</button>
+            <button v-on:click="postMember(member_id, list_id, v)" class="btn btn-primary">{{ v }}</button>
           </td>
         </tr>
       </tbody>
@@ -39,8 +37,10 @@
   {% endverbatim %}
 </div>
 
+
 <div id="footer">
 </div>
+
 {% endblock %}
 
 {% block custom_js %}
@@ -55,7 +55,8 @@ var app7 = new Vue({
   el: '#app-7',
   data: {
     membersLists: {{ df | safe}},
-    friendsDic: {{ friends_dic | safe}}
+    friendsDic: {{ friends_dic | safe}},
+    listsLst: {{ lists_lst | safe}}
   },
   methods: {
     toggleMember: function (id_name, list_name, current_value) {
