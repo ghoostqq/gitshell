@@ -37,6 +37,20 @@ resource_urls = {
 }
 
 
+def client_request(client, url, method, example_file_name):
+    resp, content = client.request(url, method)
+    if resp['status'] != '200':
+        print(content)
+        raise Exception("Invalid response from Twitter.")
+    if content.__class__ is bytes:
+        content = content.decode('ascii')
+    result = json.loads(content)
+    if settings.DEBUG:
+        with open(example_file_name, 'w') as f:
+            json.dump(result, f, indent=4)
+    return result
+
+
 @login_required(login_url='top')
 def listsView(request):
     token = oauth.Token(
@@ -47,57 +61,28 @@ def listsView(request):
     client = oauth.Client(consumer, token)
 
     # GET lists/list
-    resp, content = client.request(resource_urls['GET lists/list'], "GET")
-    if resp['status'] != '200':
-        print(content)
-        raise Exception("Invalid response from Twitter.")
-    if content.__class__ is bytes:
-        content = content.decode('ascii')
-    lists = json.loads(content)
+    lists = client_request(client, resource_urls['GET lists/list'], "GET",
+                           './example_lists.json')
     lists = [lst for lst in lists
              if lst['user']['id_str'] == request.user.username]
-    if settings.DEBUG:
-        with open('./example_lists.json', 'w') as f:
-            json.dump(lists, f, indent=4)
 
-    resp, content = client.request(resource_urls['GET friends/ids'], "GET")
-    if resp['status'] != '200':
-        print(content)
-        raise Exception("Invalid response from Twitter.")
-    if content.__class__ is bytes:
-        content = content.decode('ascii')
-    friends = json.loads(content)
+    friends = client_request(client, resource_urls['GET friends/ids'], "GET",
+                             './example_friends_ids.json')
 
     users_lookup_url = resource_urls['GET users/lookup'] + \
         '?user_id=' + ','.join(map(str, friends['ids'][:2]))
-    resp, content = client.request(users_lookup_url, "GET")
-    if resp['status'] != '200':
-        print(content)
-        raise Exception("Invalid response from Twitter.")
-    if content.__class__ is bytes:
-        content = content.decode('ascii')
-    rich_friends = json.loads(content)
-    if settings.DEBUG:
-        with open('./example_users_lookup.json', 'w') as f:
-            json.dump(rich_friends, f, indent=4)
+    rich_friends = client_request(client, users_lookup_url, "GET",
+                                  './example_rich_friends.json')
 
     LIST_ID = lists[0]['id']
     lists_members_url = resource_urls['GET lists/members'] + \
         '?list_id=' + str(LIST_ID)
-    resp, content = client.request(lists_members_url, "GET")
-    if resp['status'] != '200':
-        print(content)
-        raise Exception("Invalid response from Twitter.")
-    if content.__class__ is bytes:
-        content = content.decode('ascii')
-    lists_members = json.loads(content)
-    if settings.DEBUG:
-        with open('./example_lists_members.json', 'w') as f:
-            json.dump(lists_members, f, indent=4)
+    lists_members = client_request(client, lists_members_url, "GET",
+                                   './example_list_members.json')
 
     friends_ids = [fid for fid in friends['ids']]
-    lists_members_ids = [usr['id'] for usr in lists_members['users']]
     df = pd.DataFrame(index=friends_ids)
+    lists_members_ids = [usr['id'] for usr in lists_members['users']]
     df[str(LIST_ID)] = df.index.map(lambda x: x in lists_members_ids)
 
     return render(request, 'listter/lists.html', {
@@ -125,9 +110,7 @@ def post_member(request):
     lists_members_url = base_url + \
         f'?user_id={user_id}&list_id={list_id}'
     if settings.DEBUG:
-        print(v)
-        print(base_url)
-        print(lists_members_url)
+        print(v, '->', lists_members_url)
     resp, content = client.request(lists_members_url, "POST")
     if resp['status'] != '200':
         print(content)
@@ -139,4 +122,4 @@ def post_member(request):
         with open('./example_lists_members.json', 'w') as f:
             json.dump(lists_members, f, indent=4)
 
-    return render(request, 'listter/post_lists.html')
+    return render(request, 'listter/lists.html')

@@ -1,22 +1,14 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8" />
-  <title>Listter Lists</title>
-  <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
-</head>
-<body>
-  {{ tmp }}
+{% extends "listter/base.html" %}
+{% load static %}
 
+{% block content %}
+<div id="header">
+</div>
+
+<div id="main">
   <h1>Lists</h1>
   {{ user.profile.screen_name }}
-  {% if debug %}
-    <br>{{ user.profile.oauth_token }}
-    <br>{{ user.profile.oauth_secret }}
-  {% endif %}
-  <br>{{ lists | length }}
+  <br>{{ lists | length }} Lists
   {% for list in lists %}
   <br>{{ list.name }}
   {% endfor %}
@@ -38,9 +30,6 @@
   {% endfor %}
 
 
-
-  {# df #}
-
   {% verbatim %}
   <div id="app-7">
     <button v-on:click="postTable">POST</button>
@@ -56,7 +45,13 @@
     </table>
   </div>
   {% endverbatim %}
+</div>
 
+<div id="footer">
+</div>
+{% endblock %}
+
+{% block custom_js %}
 <script type="text/javascript">
 var csrftoken = Cookies.get('csrftoken');
 $.ajaxSetup({
@@ -108,8 +103,4 @@ var app7 = new Vue({
   }
 })
 </script>
-
-
-
-</body>
-</html>
+{% endblock %}
