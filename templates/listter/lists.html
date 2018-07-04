@@ -89,7 +89,6 @@ var app7 = new Vue({
       })
     },
     postMember: function(user_id, list_id, v) {
-      this.membersLists[user_id][list_id] = !v
       $.post(
         '/listter/post_member/',
         {
@@ -101,6 +100,7 @@ var app7 = new Vue({
         console.log('success');
         console.log(response);
         console.log(v * 1);
+        app7.membersLists[user_id][list_id] = !v;
       }, function(response){
         console.log('falure');
       })

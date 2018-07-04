@@ -119,16 +119,13 @@ def post_member(request):
     )
     # token.set_verifier(request.GET['oauth_verifier'])
     client = oauth.Client(consumer, token)
+    base_url = ('https://api.twitter.com/1.1/lists/members/create.json',
+                'https://api.twitter.com/1.1/lists/members/destroy.json')[int(v)]
 
-    if v:
-        base_url = resource_urls['POST lists/members/destroy']
-    else:
-        base_url = resource_urls['POST lists/members/create']
     lists_members_url = base_url + \
         f'?user_id={user_id}&list_id={list_id}'
     if settings.DEBUG:
         print(v)
-        print('POST lists/members/create' if v else 'POST lists/members/destroy')
         print(base_url)
         print(lists_members_url)
     resp, content = client.request(lists_members_url, "POST")
