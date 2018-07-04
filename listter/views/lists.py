@@ -68,11 +68,21 @@ def listsView(request):
 
     friends = client_request(client, resource_urls['GET friends/ids'], "GET",
                              './example_friends_ids.json')
+    friends_ids = [fid for fid in friends['ids'][:100]]
 
     users_lookup_url = resource_urls['GET users/lookup'] + \
-        '?user_id=' + ','.join(map(str, friends['ids'][:2]))
+        '?user_id=' + ','.join(map(str, friends_ids))
     rich_friends = client_request(client, users_lookup_url, "GET",
                                   './example_rich_friends.json')
+    friends_dic = dict()
+    for f in rich_friends:
+        friends_dic[f['id']] = {
+            'name': f['name'],
+            'screen_name': f['screen_name'],
+            'profile_background_image_url_https': f['profile_background_image_url_https'],
+            # 'status_text': f['status']['text'],
+        }
+    friends_dic = json.dumps(friends_dic)
 
     LIST_ID = lists[0]['id']
     lists_members_url = resource_urls['GET lists/members'] + \
@@ -80,13 +90,12 @@ def listsView(request):
     lists_members = client_request(client, lists_members_url, "GET",
                                    './example_list_members.json')
 
-    friends_ids = [fid for fid in friends['ids']]
     df = pd.DataFrame(index=friends_ids)
     lists_members_ids = [usr['id'] for usr in lists_members['users']]
     df[str(LIST_ID)] = df.index.map(lambda x: x in lists_members_ids)
 
     return render(request, 'listter/lists.html', {
-        'lists': lists, 'friends': friends, 'rich_friends': rich_friends, 'lists_members': lists_members, 'df': df.to_json(orient='index'), })
+        'lists': lists, 'friends': friends, 'rich_friends': rich_friends, 'friends_dic': friends_dic, 'lists_members': lists_members, 'df': df.to_json(orient='index'), })
 
 
 def post_lists(request):

@@ -15,14 +15,6 @@
 
   <h4>{{ friends.ids | length }} Friends</h4>
 
-  {% for f in rich_friends %}
-  <br>{{ f.name }} @{{ f.screen_name }}
-  <br>{{ f.location }}
-  <br>{{ f.description }}
-  <br>{{ f.url }}
-  <br><img src="{{ f.profile_image_url_https }}">
-  <br>{{ f.status.text }}
-  {% endfor %}
 
   <h4>{{ lists_members.users | length }} List members</h4>
   {% for user in lists_members.users %}
@@ -36,7 +28,7 @@
     <table>
       <tbody>
         <tr v-for="(member_value, member_id) in membersLists">
-          <td >{{ member_id }}</td>
+          <td >{{ friendsDic[member_id].name }}</td>
           <td v-for="(v, list_id) in member_value">
             <button v-on:click="postMember(member_id, list_id, v)">{{ v }}</button>
           </td>
@@ -62,7 +54,8 @@ $.ajaxSetup({
 var app7 = new Vue({
   el: '#app-7',
   data: {
-    membersLists: {{ df | safe}}
+    membersLists: {{ df | safe}},
+    friendsDic: {{ friends_dic | safe}}
   },
   methods: {
     toggleMember: function (id_name, list_name, current_value) {
