@@ -43,7 +43,7 @@ else:
 
     DEBUG = True
 
-    ALLOWED_HOSTS = ['vainlab.localhost', 'localhost']
+    ALLOWED_HOSTS = ['vainlab.localhost', 'localhost', '127.0.0.1']
 
     INTERNAL_IPS = (
         '127.0.0.1',
@@ -53,8 +53,8 @@ else:
 # Application definition
 
 INSTALLED_APPS = [
-    'listter',
     'vainlab',
+    'django_extensions',
     # 'django.contrib.sites',
     'django.contrib.admin',
     'django.contrib.auth',
