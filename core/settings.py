@@ -75,7 +75,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'gitshell.urls'
+ROOT_URLCONF = 'core.urls'
 # SUBDOMAIN_URLCONFS = {
 #     None: 'gitshell.urls',
 #     'vainlab': 'gitshell.urls.vainlab',
@@ -97,7 +97,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'gitshell.wsgi.application'
+WSGI_APPLICATION = 'core.wsgi.application'
 
 
 # Database
