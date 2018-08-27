@@ -47,9 +47,11 @@
 
     <!-- Matches -->
     {% for m in matches %}
-    <div class="single-match">
-      {% include "vainlab/_match.html" %}
-    </div>
+    <a href="{% url 'match_telemetry' m.id %}">
+      <div class="single-match">
+        {% include "vainlab/_match.html" %}
+      </div>
+    </a>
     {% endfor %}
     {% endif %}
   </div>

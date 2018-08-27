@@ -1,9 +1,12 @@
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from django.views import generic
+from django.views.generic import DetailView, ListView
 
 from .forms import NameForm
-from .models import Participant, Player, top_actor_win_rates
+from .models import Match, Participant, Player, top_actor_win_rates
 from .vain_api import VainAPI
+
+vg = VainAPI()
 
 
 def index(request, ):
@@ -11,7 +14,7 @@ def index(request, ):
     return render(request, 'vainlab/index.html', {'form': form})
 
 
-class PlayerView(generic.DetailView):
+class PlayerView(DetailView):
     model = Player
     slug_field = 'name'
     template_name = 'vainlab/player.html'
@@ -20,7 +23,7 @@ class PlayerView(generic.DetailView):
         return Player.objects
 
 
-class PlayersView(generic.ListView):
+class PlayersView(ListView):
     template_name = 'vainlab/players.html'
     context_object_name = 'top_players_list'
 
@@ -34,14 +37,14 @@ def player_matches(request, name):
     form = NameForm()
     # もしプレイヤーがDBに存在しない場合、APIリクエストを送る
     if not Player.objects.filter(name=name).exists():
-        err = VainAPI().player_matches_wo_region(name)
+        err = vg.player_matches_wo_region(name)
         if err:
             return render(request, 'vainlab/player_matches.html', {'error': err, 'form': form})
     # もしプレイヤーがDBに存在して、最後の試合orリクエストから一定時間経過している場合、
     # APIリクエストを送る
     player = Player.objects.get(name=name)
     if player.spent_enough_cooldown_time():
-        err = VainAPI().player_matches(player.shard, player.name)
+        err = vg.player_matches(player.shard, player.name)
         player.updated_now()
         if err:
             return render(request, 'vainlab/player_matches.html', {'error': err, 'form': form})
@@ -49,6 +52,13 @@ def player_matches(request, name):
 
     return render(request, 'vainlab/player_matches.html',
                   {'player': player, 'matches': matches, 'form': form})
+
+
+def match_telemetry(request, match_id):
+    # Should return error instead.
+    url = Match.objects.get(id=match_id).telemetry_url
+    res = vg.match_telemetry(url)
+    return HttpResponse(res)
 
 
 def search_player(request, ):

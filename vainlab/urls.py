@@ -25,6 +25,7 @@ urlpatterns = [
     path('players/', views.PlayersView.as_view(), name='players'),
     path('player/<str:name>/',
          views.player_matches, name='player_matches'),
+    path('match/<str:match_id>/', views.match_telemetry, name='match_telemetry'),
     path('search_player/', views.search_player, name='search_player'),
     # path('form/', views.form, name='form'),
     path('rankings/', views.ranking, name='rankings'),

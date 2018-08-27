@@ -74,17 +74,22 @@ class VainAPI:
         matches = list()
         ro2m = dict()
         # Match
-        for i in res['data']:
+        for d in res['data']:
+            for i in res['included']:
+                if i['type'] == 'asset' and i['id'] == d['relationships']['assets']['data'][0]['id']:
+                    # TODO: maybe no url exeption could happen.
+                    telemetry_url = i['attributes']['URL']
             match = Match(
-                id=i['id'],
-                datetime=i['attributes']['createdAt'],
-                mode=i['attributes']['gameMode'],
-                version=i['attributes']['patchVersion'],
+                id=d['id'],
+                datetime=d['attributes']['createdAt'],
+                mode=d['attributes']['gameMode'],
+                version=d['attributes']['patchVersion'],
+                telemetry_url=telemetry_url,
             )
             match.save()
             matches.append(match)
-            for roster in i['relationships']['rosters']['data']:
-                ro2m[roster['id']] = i['id']
+            for roster in d['relationships']['rosters']['data']:
+                ro2m[roster['id']] = d['id']
         pa2r = dict()
         # Roster -> Match
         for i in res['included']:
@@ -168,6 +173,16 @@ class VainAPI:
 
     def player_matches_wo_region(self, ign):
         return self._request_without_region(ign, self.player_matches)
+
+    # Telemetry. (Does not require api key)
+    def match_telemetry(self, url):
+        ''' Match Telemetry. https://vainglory-gamelocker-documentation.readthedocs.io/en/master/telemetry/telemetry.html '''
+        headers = {
+            # 'X-TITLE-ID': 'semc-vainglory',
+            'Accept': 'application/vnd.api+json',
+            # 'Accept-Encoding': 'gzip',
+        }
+        return requests.get(url, headers=headers)  # .json()
 
 
 # ================

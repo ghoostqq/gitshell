@@ -5,23 +5,6 @@ from django.db import models as m
 from django.utils import timezone
 from django_pandas.io import read_frame
 
-MODE_JA = {
-    'casual':                           'カジュアル',
-    'ranked':                           'ランク',
-    'casual_aral':                      '大乱闘',
-    'blitz_pvp_ranked':                 '電撃',
-    'blitz_rounds_pvp_casual':          'ガチンコ',
-    'private':                          'プラベカジュ',
-    'private_party_draft_match':        'プラベドラフト',
-    'private_party_aral_match':         'プラベ大乱闘',
-    'private_party_blitz_match':        'プラベ電撃',
-    'private_party_blitz_rounds_match': 'プラベガチンコ',
-    'private_party_vg_5v5':             'プラベ5V5カジュ',
-    'private_party_draft_match_5v5':    'プラベ5V5ドラフト',
-    '5v5_pvp_casual':                   '5V5カジュ',
-    '5v5_pvp_ranked':                   '5V5ランク',
-}
-
 
 class Player(m.Model):
     id = m.CharField(max_length=100, unique=True, primary_key=True)
@@ -57,11 +40,28 @@ class Match(m.Model):
     mode = m.CharField(max_length=50)
     version = m.CharField(max_length=10)
     # has two rosters.
+    telemetry_url = m.URLField(max_length=200)
 
     def __str__(self):
         return self.mode
 
     def mode_ja(self):
+        MODE_JA = {
+            'casual':                           'カジュアル',
+            'ranked':                           'ランク',
+            'casual_aral':                      '大乱闘',
+            'blitz_pvp_ranked':                 '電撃',
+            'blitz_rounds_pvp_casual':          'ガチンコ',
+            'private':                          'プラベカジュ',
+            'private_party_draft_match':        'プラベドラフト',
+            'private_party_aral_match':         'プラベ大乱闘',
+            'private_party_blitz_match':        'プラベ電撃',
+            'private_party_blitz_rounds_match': 'プラベガチンコ',
+            'private_party_vg_5v5':             'プラベ5V5カジュ',
+            'private_party_draft_match_5v5':    'プラベ5V5ドラフト',
+            '5v5_pvp_casual':                   '5V5カジュ',
+            '5v5_pvp_ranked':                   '5V5ランク',
+        }
         return MODE_JA.get(self.mode, self.mode)
 
 
