@@ -4,7 +4,7 @@ from logging import DEBUG, StreamHandler, getLogger
 
 import requests
 
-from .models import Match, Participant, Player, Roster
+from .models import Item, Match, Participant, Player, Roster
 
 logger = getLogger(__name__)
 handler = StreamHandler()
@@ -201,6 +201,15 @@ class Telemetry:
                 if a['payload']['Actor'] == actor:
                     timeline.append([a['time'], a['payload']['Item']])
         return timeline
+
+    def participant_core_item_ids(self, actor):
+        tl = self.participant_buy_item(actor)
+        item_ids_in_order = []
+        for _, i_name in tl:
+            item, created = Item.objects.get_or_create(name=i_name)
+            if item.tier == 3:
+                item_ids_in_order.append(item.id)
+        return item_ids_in_order
 
 
 # ================
