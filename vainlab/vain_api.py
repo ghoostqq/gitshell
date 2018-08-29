@@ -29,7 +29,7 @@ class VainAPI:
             'Authorization': self.apikey,
             'X-TITLE-ID': 'semc-vainglory',
             'Accept': 'application/vnd.api+json',
-            # 'Accept-Encoding': 'gzip',
+            'Accept-Encoding': 'gzip',
         }
         return requests.get(url, headers=headers, params=params).json()
 
@@ -189,7 +189,7 @@ class Telemetry:
         # Telemetry does not require api key
         headers = {
             'Accept': 'application/vnd.api+json',
-            # 'Accept-Encoding': 'gzip',
+            'Accept-Encoding': 'gzip',
         }
         self.assets = requests.get(url, headers=headers).json()
 
