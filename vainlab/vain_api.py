@@ -133,8 +133,7 @@ class VainAPI:
                 try:
                     p = Participant(
                         id=i['id'],
-                        # Assuming like '*Vox*' -> 'Vox'
-                        actor=i['attributes']['actor'][1:-1],
+                        actor=i['attributes']['actor'],
                         shard=i['attributes']['shardId'],
                         kills=i['attributes']['stats'].get('kills', 0),
                         deaths=i['attributes']['stats'].get('deaths', 0),
@@ -204,12 +203,17 @@ class Telemetry:
 
     def participant_core_item_ids(self, actor):
         tl = self.participant_buy_item(actor)
-        item_ids_in_order = []
+        tier_3_item_ids_in_order = []
         for _, i_name in tl:
             item, created = Item.objects.get_or_create(name=i_name)
             if item.tier == 3:
-                item_ids_in_order.append(item.id)
-        return item_ids_in_order
+                tier_3_item_ids_in_order.append(item.id)
+        return tier_3_item_ids_in_order
+
+    def match_item(self, match_id):
+        match = Match.objects.get(id=match_id)
+        for participant in match.participant_set.all():
+            self.participant_core_item_ids(participant.actor)
 
 
 # ================
