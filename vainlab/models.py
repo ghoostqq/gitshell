@@ -1,9 +1,17 @@
 import datetime
 import json
+from logging import DEBUG, StreamHandler, getLogger
 
 from django.db import models as m
 from django.utils import timezone
 from django_pandas.io import read_frame
+
+logger = getLogger(__name__)
+handler = StreamHandler()
+handler.setLevel(DEBUG)
+logger.setLevel(DEBUG)
+logger.addHandler(handler)
+logger.propagate = False
 
 
 class Player(m.Model):
@@ -98,8 +106,26 @@ class Participant(m.Model):
 
     actor = m.CharField(max_length=50)
 
+    # Telemetry
+    items_core_3 = m.BigIntegerField(null=True)
+    items_core_4 = m.BigIntegerField(null=True)
+
+    items_buy_order = m.CharField(null=True, max_length=500)
+
     def __str__(self):
         return self.actor
+
+    def save(self, *args, **kwargs):
+        # Before save
+        if False:
+            items = json.loads(self.items)
+            for item_name in items:
+                item, created = Item.objects.get_or_create(name=item_name)
+                if created:
+                    logger.debug(f'Created: {item}')
+        # Default save
+        super(Participant, self).save(*args, **kwargs)
+        # After save
 
     def won_ja(self):
         return ('敗北', '勝利')[self.won]
@@ -122,6 +148,10 @@ class Participant(m.Model):
 
     def side_class(self):
         return self.side.replace('/', '-')
+
+
+class Item(m.Model):
+    name = m.CharField(max_length=100, unique=True, primary_key=True)
 
 
 def top_actor_win_rates(participant_class):

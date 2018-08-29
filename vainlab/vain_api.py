@@ -1,11 +1,18 @@
 import json
 import os
+from logging import DEBUG, StreamHandler, getLogger
 
 import requests
 
 from .models import Match, Participant, Player, Roster
 
-# from .models import Item, Match, Participant, Player, Roster
+logger = getLogger(__name__)
+handler = StreamHandler()
+handler.setLevel(DEBUG)
+logger.setLevel(DEBUG)
+logger.addHandler(handler)
+logger.propagate = False
+
 
 SHARDS = ['ea', 'na', 'sg', 'eu', 'sa', 'cn']
 
@@ -144,7 +151,8 @@ class VainAPI:
                         roster_id=pa2r[i['id']],
                     )
                     p.save()
-                except Exception:
+                except Exception as e:
+                    logger.debug(e)
                     continue
         # Matches =(many-to-many)=> Players
         for m in matches:
@@ -174,15 +182,25 @@ class VainAPI:
     def player_matches_wo_region(self, ign):
         return self._request_without_region(ign, self.player_matches)
 
-    # Telemetry. (Does not require api key)
-    def match_telemetry(self, url):
-        ''' Match Telemetry. https://vainglory-gamelocker-documentation.readthedocs.io/en/master/telemetry/telemetry.html '''
+
+class Telemetry:
+    ''' Match Telemetry. https://vainglory-gamelocker-documentation.readthedocs.io/en/master/telemetry/telemetry.html '''
+
+    def __init__(self, url):
+        # Telemetry does not require api key
         headers = {
-            # 'X-TITLE-ID': 'semc-vainglory',
             'Accept': 'application/vnd.api+json',
             # 'Accept-Encoding': 'gzip',
         }
-        return requests.get(url, headers=headers)  # .json()
+        self.assets = requests.get(url, headers=headers).json()
+
+    def participant_buy_item(self, actor):
+        timeline = []
+        for a in self.assets:
+            if a['type'] == 'BuyItem':
+                if a['payload']['Actor'] == actor:
+                    timeline.append([a['time'], a['payload']['Item']])
+        return timeline
 
 
 # ================

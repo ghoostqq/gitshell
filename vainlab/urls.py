@@ -26,6 +26,8 @@ urlpatterns = [
     path('player/<str:name>/',
          views.player_matches, name='player_matches'),
     path('match/<str:match_id>/', views.match_telemetry, name='match_telemetry'),
+    path('match/<str:match_id>/<str:actor>/', views.match_telemetry_participant_items,
+         name='match_telemetry_participant_items'),
     path('search_player/', views.search_player, name='search_player'),
     # path('form/', views.form, name='form'),
     path('rankings/', views.ranking, name='rankings'),

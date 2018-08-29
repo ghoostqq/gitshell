@@ -1,10 +1,12 @@
+import json
+
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import DetailView, ListView
 
 from .forms import NameForm
 from .models import Match, Participant, Player, top_actor_win_rates
-from .vain_api import VainAPI
+from .vain_api import Telemetry, VainAPI
 
 vg = VainAPI()
 
@@ -57,8 +59,14 @@ def player_matches(request, name):
 def match_telemetry(request, match_id):
     # Should return error instead.
     url = Match.objects.get(id=match_id).telemetry_url
-    res = vg.match_telemetry(url)
+    res = json.dumps(Telemetry(url).assets)
     return HttpResponse(res)
+
+
+def match_telemetry_participant_items(request, match_id, actor):
+    m = Match.objects.get(id=match_id)
+    t = Telemetry(m.telemetry_url)
+    return HttpResponse([t.participant_buy_item(actor), m.participant_set.get(actor=actor[1:-1]).items])
 
 
 def search_player(request, ):
