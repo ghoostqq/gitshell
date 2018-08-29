@@ -107,8 +107,8 @@ class Participant(m.Model):
     actor = m.CharField(max_length=50)
 
     # Telemetry
-    items_core_3 = m.BigIntegerField(null=True)
-    items_core_4 = m.BigIntegerField(null=True)
+    items_core_3 = m.CharField(null=True, max_length=100)
+    items_core_4 = m.CharField(null=True, max_length=100)
 
     items_buy_order = m.CharField(null=True, max_length=500)
 
@@ -152,6 +152,7 @@ class Participant(m.Model):
 
 class Item(m.Model):
     name = m.CharField(max_length=100, unique=True, primary_key=True)
+    tier = m.SmallIntegerField(default=0)
 
 
 def top_actor_win_rates(participant_class):
