@@ -152,7 +152,10 @@ class Participant(m.Model):
 
 class Item(m.Model):
     name = m.CharField(max_length=100, unique=True, primary_key=True)
-    tier = m.SmallIntegerField(default=0)
+    tier = m.SmallIntegerField(null=True, default=0)
+
+    def __str__(self):
+        return f'[Tier: {self.tier}] {self.name}'
 
 
 def top_actor_win_rates(participant_class):

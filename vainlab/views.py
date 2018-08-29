@@ -66,7 +66,7 @@ def match_telemetry(request, match_id):
 def match_telemetry_participant_items(request, match_id, actor):
     m = Match.objects.get(id=match_id)
     t = Telemetry(m.telemetry_url)
-    return HttpResponse([t.participant_buy_item(actor), m.participant_set.get(actor=actor[1:-1]).items])
+    return HttpResponse([t.participant_buy_item(actor), m.participant_set.get(actor=actor[1:-1]).items, t.participant_core_item_ids(actor)])
 
 
 def search_player(request, ):
