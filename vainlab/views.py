@@ -35,6 +35,10 @@ class PlayersView(ListView):
         ).order_by('-elo')[:10]
 
 
+class MatchesView(ListView):
+    model = Match
+
+
 def player_matches(request, name):
     form = NameForm()
     # もしプレイヤーがDBに存在しない場合、APIリクエストを送る
