@@ -17,6 +17,7 @@
 {% for match in match_list %}
 <div>
   {{ match.id }}
+  {% include "vainlab/_match.html" with m=match pa=None %}
 </div>
 {% endfor %}
 

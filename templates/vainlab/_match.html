@@ -1,5 +1,6 @@
 {% load static %}
 
+{% if pa %}
       <div class="m-summary">
         <div class="role">
           <div class="won" style="background-color: {% if pa.won %}#ffce2d{% else %}#888888{% endif %};">
@@ -14,10 +15,12 @@
           <span class="mw-won">{{ pa.won_ja }}</span>
         </div>
       </div>
+{% endif %}
 
 
 
       <div class="m-details">
+{% if pa %}
         <!-- Items -->
         <div class="item-build-wrapper">
           <div class="item-build">
@@ -48,6 +51,7 @@
           </div>
           {# <img class="icon" src="{% static 'vainlab/icon/duration.svg' %}">{{ m.duration }} #}
         </div>
+{% endif %}
 
         <!-- Rosters -->
         <div class="rosters">
