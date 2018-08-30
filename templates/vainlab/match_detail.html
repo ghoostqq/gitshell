@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block custom_css %}
+<link href="{% static 'vainlab/style.css' %}" rel="stylesheet">
+<link href="{% static 'vainlab/sprite/hero-32.css' %}" rel="stylesheet">
+<link href="{% static 'vainlab/sprite/hero-116-80.css' %}" rel="stylesheet">
+<link href="{% static 'vainlab/sprite/items-48-38.css' %}" rel="stylesheet">
+{% endblock %}
+
+
+{% block content %}
+{# error #}
+{# player #}
+
+<div>
+  {{ match.id }}
+</div>
+
+{% endblock %}
