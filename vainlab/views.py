@@ -60,9 +60,11 @@ def player_matches(request, name):
         if err:
             return render(request, 'vainlab/player_matches.html', {'error': err, 'form': form})
     matches = player.match_set.all().order_by('-datetime')[:50]
+    player_matches = [(m.participant_set.get(player=player), m)
+                      for m in matches]
 
     return render(request, 'vainlab/player_matches.html',
-                  {'player': player, 'matches': matches, 'form': form})
+                  {'player': player, 'player_matches': player_matches, 'form': form})
 
 
 def match_telemetry(request, match_id):

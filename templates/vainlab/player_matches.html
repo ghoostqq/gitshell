@@ -29,7 +29,7 @@
 
 
   <div class="all-matches">
-    {% if matches.errors %} <p>Error: {# matches.errors #}</p>
+    {% if player_matches.errors %} <p>Error: {# player_matches.errors #}</p>
     {% else %}
 
     <!-- Player card -->
@@ -46,10 +46,10 @@
     </div>
 
     <!-- Matches -->
-    {% for m in matches %}
+    {% for pa, m in player_matches %}
     <a href="{% url 'match_telemetry' m.id %}">
       <div class="single-match">
-        {% include "vainlab/_match.html" %}
+        {% include "vainlab/_match.html" with m=m pa=pa %}
       </div>
     </a>
     {% endfor %}

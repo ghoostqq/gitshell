@@ -1,7 +1,5 @@
 {% load static %}
 
-{% for pa in m.participant_set.iterator %}
-{% if pa.player == player %}
       <div class="m-summary">
         <div class="role">
           <div class="won" style="background-color: {% if pa.won %}#ffce2d{% else %}#888888{% endif %};">
@@ -71,6 +69,4 @@
           {% endfor %}
         </div>
       </div>
-{% endif %}
-{% endfor %}
 
