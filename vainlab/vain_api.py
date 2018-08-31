@@ -5,6 +5,7 @@ from threading import Thread
 
 import requests
 
+from .helper import ItemHelper
 from .models import Item, Match, Participant, Player, Roster
 
 logger = getLogger(__name__)
@@ -16,6 +17,7 @@ logger.propagate = False
 
 
 SHARDS = ['ea', 'na', 'sg', 'eu', 'sa', 'cn']
+ih = ItemHelper()
 
 
 class VainAPI:
@@ -227,10 +229,12 @@ class MatchTelemetry:
     def _participant_core_item_ids(self, actor):
         tl = self._participant_buy_item(actor)
         tier_3_item_ids_in_order = []
-        for _, i_name in tl:
-            item, created = Item.objects.get_or_create(name=i_name)
-            if item.tier == 3:
-                tier_3_item_ids_in_order.append(item.id)
+        for _, item_name in tl:
+            tier = ih.item_tier.get(item_name, 0)
+            if not tier:
+                Item(name=item_name).save()
+            if tier is 3:
+                tier_3_item_ids_in_order.append(ih.item_t3id[item_name])
         return tier_3_item_ids_in_order
 
 

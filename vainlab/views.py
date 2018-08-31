@@ -77,14 +77,18 @@ def match_telemetry(request, match_id):
     m = Match.objects.get(id=match_id)
     t = MatchTelemetry(m)
     res = json.dumps(t.get_assets())
-    t.daemon_process_match_obj(m)
+    t.daemon_process_match_obj()
     return HttpResponse(res)
 
 
 def match_telemetry_participant_items(request, match_id, actor):
     m = Match.objects.get(id=match_id)
     t = MatchTelemetry(m)
-    return HttpResponse([t.participant_buy_item(actor), m.participant_set.get(actor=actor[1:-1]).items, t.participant_core_item_ids(actor)])
+    return HttpResponse([
+        t._participant_buy_item(actor),
+        # m.participant_set.get(actor=actor).items,
+        t._participant_core_item_ids(actor)
+    ])
 
 
 def search_player(request, ):
