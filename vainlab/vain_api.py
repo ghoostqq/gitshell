@@ -183,40 +183,42 @@ class VainAPI:
         return self._request_without_region(ign, self.player_matches)
 
 
-class Telemetry:
-    ''' Match Telemetry. https://vainglory-gamelocker-documentation.readthedocs.io/en/master/telemetry/telemetry.html '''
+class MatchTelemetry:
+    ''' Match Telemetry. Should be associated with a single Match object '''
+    # https://vainglory-gamelocker-documentation.readthedocs.io/en/master/telemetry/telemetry.html
 
-    def __init__(self, url):
-        # Telemetry does not require api key
-        headers = {
-            'Accept': 'application/vnd.api+json',
-            'Accept-Encoding': 'gzip',
-        }
-        self.assets = requests.get(url, headers=headers).json()
+    def __init__(self, match):
+        self.assets = None
+        self.match = match
 
     # Public
-    def daemon_process_match_obj(self, match):
+    def daemon_process_match_obj(self):
         ''' Interface that runs daemon '''
         Thread(
-            target=self.process_match_obj, daemon=True, kwargs={'match': match}
+            target=self.process_match_obj, daemon=True
         ).start()
 
-    def process_match_obj(self, match):
-        for participant in match.participant_set.all():
+    def process_match_obj(self):
+        for participant in self.match.participant_set.all():
             self._participant_core_item_ids(participant.actor)
 
-    def process_match_obj_list(self, match_list):
-        for match in match_list:
-            self.process_match_obj(match)
-
-    def process_match_id(self, id):
-        match = Match.objects.get(id=id)
-        self.process_match_obj(match)
+    def get_assets(self):
+        if self.assets:
+            return self.assets
+        else:
+            # Telemetry does not require api key
+            headers = {
+                'Accept': 'application/vnd.api+json',
+                'Accept-Encoding': 'gzip',
+            }
+            self.assets = requests.get(
+                self.match.telemetry_url, headers=headers).json()
+            return self.assets
 
     # Private
     def _participant_buy_item(self, actor):
         timeline = []
-        for a in self.assets:
+        for a in self.get_assets():
             if a['type'] == 'BuyItem':
                 if a['payload']['Actor'] == actor:
                     timeline.append([a['time'], a['payload']['Item']])

@@ -7,7 +7,7 @@ from django.views.generic import DetailView, ListView
 
 from .forms import NameForm
 from .models import Match, Participant, Player, top_actor_win_rates
-from .vain_api import Telemetry, VainAPI
+from .vain_api import MatchTelemetry, VainAPI
 
 vg = VainAPI()
 
@@ -64,6 +64,10 @@ def player_matches(request, name):
     player_matches = [(m.participant_set.get(player=player), m)
                       for m in matches]
 
+    # Match Telemetry
+    # for match in matches:
+    #     MatchTelemetry(match).daemon_process_match_obj()
+
     return render(request, 'vainlab/player_matches.html',
                   {'player': player, 'player_matches': player_matches, 'form': form})
 
@@ -71,16 +75,15 @@ def player_matches(request, name):
 def match_telemetry(request, match_id):
     # Should return error instead.
     m = Match.objects.get(id=match_id)
-    url = m.telemetry_url
-    t = Telemetry(url)
-    res = json.dumps(t.assets)
+    t = MatchTelemetry(m)
+    res = json.dumps(t.get_assets())
     t.daemon_process_match_obj(m)
     return HttpResponse(res)
 
 
 def match_telemetry_participant_items(request, match_id, actor):
     m = Match.objects.get(id=match_id)
-    t = Telemetry(m.telemetry_url)
+    t = MatchTelemetry(m)
     return HttpResponse([t.participant_buy_item(actor), m.participant_set.get(actor=actor[1:-1]).items, t.participant_core_item_ids(actor)])
 
 
