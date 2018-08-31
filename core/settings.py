@@ -55,6 +55,7 @@ else:
 INSTALLED_APPS = [
     'vainlab',
     'django_extensions',
+    'background_task',
     # 'django.contrib.sites',
     'django.contrib.admin',
     'django.contrib.auth',
