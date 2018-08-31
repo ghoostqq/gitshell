@@ -15,8 +15,10 @@
 {# player #}
 
 {% for participant in participant_list %}
-<div class="single-match">
-  {% include "vainlab/_participant.html" with pa=participant %}
+<div>
+  {{ participant.actor }}
+  {{ participant.id }}
+  {# include "vainlab/_match.html" with m=match pa=None #}
 </div>
 {% endfor %}
 
