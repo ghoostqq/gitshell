@@ -70,8 +70,11 @@ def player_matches(request, name):
 
 def match_telemetry(request, match_id):
     # Should return error instead.
-    url = Match.objects.get(id=match_id).telemetry_url
-    res = json.dumps(Telemetry(url).assets)
+    m = Match.objects.get(id=match_id)
+    url = m.telemetry_url
+    t = Telemetry(url)
+    res = json.dumps(t.assets)
+    t.daemon_process_match_obj(m)
     return HttpResponse(res)
 
 

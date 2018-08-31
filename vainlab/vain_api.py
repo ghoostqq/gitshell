@@ -1,6 +1,7 @@
 import json
 import os
 from logging import DEBUG, StreamHandler, getLogger
+from threading import Thread
 
 import requests
 
@@ -193,7 +194,27 @@ class Telemetry:
         }
         self.assets = requests.get(url, headers=headers).json()
 
-    def participant_buy_item(self, actor):
+    # Public
+    def daemon_process_match_obj(self, match):
+        ''' Interface that runs daemon '''
+        Thread(
+            target=self.process_match_obj, daemon=True, kwargs={'match': match}
+        ).start()
+
+    def process_match_obj(self, match):
+        for participant in match.participant_set.all():
+            self._participant_core_item_ids(participant.actor)
+
+    def process_match_obj_list(self, match_list):
+        for match in match_list:
+            self.process_match_obj(match)
+
+    def process_match_id(self, id):
+        match = Match.objects.get(id=id)
+        self.process_match_obj(match)
+
+    # Private
+    def _participant_buy_item(self, actor):
         timeline = []
         for a in self.assets:
             if a['type'] == 'BuyItem':
@@ -201,19 +222,14 @@ class Telemetry:
                     timeline.append([a['time'], a['payload']['Item']])
         return timeline
 
-    def participant_core_item_ids(self, actor):
-        tl = self.participant_buy_item(actor)
+    def _participant_core_item_ids(self, actor):
+        tl = self._participant_buy_item(actor)
         tier_3_item_ids_in_order = []
         for _, i_name in tl:
             item, created = Item.objects.get_or_create(name=i_name)
             if item.tier == 3:
                 tier_3_item_ids_in_order.append(item.id)
         return tier_3_item_ids_in_order
-
-    def match_item(self, match_id):
-        match = Match.objects.get(id=match_id)
-        for participant in match.participant_set.all():
-            self.participant_core_item_ids(participant.actor)
 
 
 # ================
