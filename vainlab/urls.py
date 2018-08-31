@@ -31,6 +31,7 @@ urlpatterns = [
          views.match_telemetry, name='match_telemetry'),
     path('match_telemetry/<str:match_id>/<str:actor>/', views.match_telemetry_participant_items,
          name='match_telemetry_participant_items'),
+    path('participants/', views.ParticipantsView.as_view(), name='participants'),
     path('search_player/', views.search_player, name='search_player'),
     # path('form/', views.form, name='form'),
     path('rankings/', views.ranking, name='rankings'),

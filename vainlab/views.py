@@ -45,6 +45,10 @@ class MatchView(DetailView):
     slug_field = 'id'
 
 
+class ParticipantsView(ListView):
+    model = Participant
+
+
 def player_matches(request, name):
     form = NameForm()
     # もしプレイヤーがDBに存在しない場合、APIリクエストを送る

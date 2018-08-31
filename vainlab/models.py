@@ -48,7 +48,7 @@ class Match(m.Model):
     mode = m.CharField(max_length=50)
     version = m.CharField(max_length=10)
     # has two rosters.
-    telemetry_url = m.URLField(max_length=200)
+    telemetry_url = m.URLField(null=True, max_length=200)
 
     def __str__(self):
         return self.mode

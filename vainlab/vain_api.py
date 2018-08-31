@@ -83,6 +83,7 @@ class VainAPI:
         # ===============
         matches = list()
         ro2m = dict()
+        ignore_ro = list()
         # Match
         for d in res['data']:
             for i in res['included']:
@@ -101,6 +102,7 @@ class VainAPI:
             for roster in d['relationships']['rosters']['data']:
                 ro2m[roster['id']] = d['id']
         pa2r = dict()
+        ignore_pa = list()
         # Roster -> Match
         for i in res['included']:
             if i['type'] == 'roster':
