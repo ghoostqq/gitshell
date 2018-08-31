@@ -10,6 +10,7 @@ django-background-tasks = "*"
 django-pandas = "*"
 werkzeug = "*"
 requests = "*"
+ipython = "*"
 
 [dev-packages]
 
