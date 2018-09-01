@@ -23,7 +23,7 @@ urlpatterns = [
     # path('player/', views.player_matches, name='player_matches'),
     path('single_player/<slug:slug>/', views.PlayerView.as_view(), name='player'),
     path('players/', views.PlayersView.as_view(), name='players'),
-    path('player/<str:name>/',
+    path('player_matches/<str:name>/',
          views.player_matches, name='player_matches'),
     path('matches/', views.MatchesView.as_view(), name='matches'),
     path('match/<slug:slug>/', views.MatchView.as_view(), name='match'),

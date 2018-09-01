@@ -74,7 +74,7 @@ class VainAPI:
         return wrapped
 
     def player_matches(self, reg, ign, debug=False):
-        res = self._request_without_region(reg, ign)
+        res = self._request_player_matches(reg, ign)
 
         if debug:
             with open('./tmp', 'w') as f:
