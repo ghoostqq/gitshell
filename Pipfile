@@ -11,6 +11,9 @@ django-pandas = "*"
 werkzeug = "*"
 requests = "*"
 ipython = "*"
+celery = "*"
+django-celery-results = "*"
+redis = "*"
 
 [dev-packages]
 
