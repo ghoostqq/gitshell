@@ -22,9 +22,6 @@ class PlayerView(DetailView):
     slug_field = 'name'
     template_name = 'vainlab/player.html'
 
-    def get_queryset(self):
-        return Player.objects
-
 
 class PlayersView(ListView):
     template_name = 'vainlab/players.html'
