@@ -69,8 +69,8 @@ def player_matches(request, name):
                       for m in matches]
 
     # Match Telemetry
-    # for match in matches:
-    #     MatchTelemetry(match).daemon_process_match_obj()
+    for match in matches:
+        MatchTelemetry(match).daemon_process_match_obj()
 
     return render(request, 'vainlab/player_matches.html',
                   {'player': player, 'player_matches': player_matches, 'form': form})

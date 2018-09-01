@@ -1,7 +1,7 @@
 import json
 import os
+import threading
 from logging import DEBUG, StreamHandler, getLogger
-from threading import Thread
 
 import requests
 
@@ -198,7 +198,7 @@ class MatchTelemetry:
     # Public
     def daemon_process_match_obj(self):
         ''' Interface that runs daemon '''
-        Thread(
+        threading.Thread(
             target=self.process_match_obj, daemon=True
         ).start()
 
@@ -233,10 +233,10 @@ class MatchTelemetry:
         tier_3_item_ids_in_order = []
         for _, item_name in tl:
             tier = ih.item_tier.get(item_name, 0)
-            if not tier:
-                Item(name=item_name).save()
             if tier is 3:
                 tier_3_item_ids_in_order.append(ih.item_t3id[item_name])
+            elif not tier:
+                Item(name=item_name).save()
         return tier_3_item_ids_in_order
 
 
