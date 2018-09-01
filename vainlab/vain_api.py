@@ -26,6 +26,8 @@ class VainAPI:
     def __init__(self):
         self.apikey = os.getenv("VAIN_APIKEY", "")
         self.apikey_crawl = os.getenv("VAIN_APIKEY_CRAWL", "")
+        if not self.apikey:
+            raise Exception('No Vainglory API key found.')
 
     def request(self, url, params):
         headers = {
@@ -35,6 +37,16 @@ class VainAPI:
             'Accept-Encoding': 'gzip',
         }
         return requests.get(url, headers=headers, params=params).json()
+
+    def _request_player_matches(self, reg, ign):
+        # 50 => 1.3s
+        # 10 => 0.9s
+        url = f'https://api.dc01.gamelockerapp.com/shards/{reg}/matches'
+        params = {
+            'filter[playerNames]': [ign],
+            'sort': '-createdAt',
+        }
+        return self.request(url, params)
 
     def single_player(self, reg, ign):
         url = f'https://api.dc01.gamelockerapp.com/shards/{reg}/players'
@@ -62,12 +74,7 @@ class VainAPI:
         return wrapped
 
     def player_matches(self, reg, ign, debug=False):
-        url = f'https://api.dc01.gamelockerapp.com/shards/{reg}/matches'
-        params = {
-            'filter[playerNames]': [ign],
-            'sort': '-createdAt',
-        }
-        res = self.request(url, params)
+        res = self._request_without_region(reg, ign)
 
         if debug:
             with open('./tmp', 'w') as f:
@@ -77,6 +84,12 @@ class VainAPI:
         # Exit if error
         if res.get('errors', ''):
             return res
+
+        self._save_player_matches(res)
+
+    def _save_player_matches(self, res):
+        # 50 => 1.8s
+        # 5 => 0.16s
 
         # ===============
         # Save to DB

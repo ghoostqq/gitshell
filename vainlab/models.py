@@ -17,9 +17,8 @@ logger.propagate = False
 class Player(m.Model):
     id = m.CharField(max_length=100, unique=True, primary_key=True)
     name = m.CharField(max_length=50, db_index=True)
-    # slug = m.SlugField(max_length=50)
-    # name = m.SlugField(max_length=50)
     shard = m.CharField('region', max_length=10)
+
     elo = m.PositiveSmallIntegerField(default=0)  # 0 to 32767
     tier = m.PositiveSmallIntegerField(default=0)
     wins = m.PositiveIntegerField(default=0)
