@@ -20,6 +20,8 @@ class Player(m.Model):
     shard = m.CharField('region', max_length=10)
 
     elo = m.PositiveSmallIntegerField(default=0)  # 0 to 32767
+    elo_3v3 = m.PositiveSmallIntegerField(default=0)
+    elo_5v5 = m.PositiveSmallIntegerField(default=0)
     tier = m.PositiveSmallIntegerField(default=0)
     wins = m.PositiveIntegerField(default=0)
 

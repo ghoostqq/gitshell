@@ -46,6 +46,14 @@ class ParticipantsView(ListView):
     model = Participant
 
 
+def play_log(request, name):
+    form = NameForm()
+
+    # See if name is in Player
+    # If exists, return Player and its Participant list
+    # If not, use api to request Player
+
+
 def player_matches(request, name):
     form = NameForm()
     # もしプレイヤーがDBに存在しない場合、APIリクエストを送る

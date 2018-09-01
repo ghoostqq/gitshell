@@ -48,12 +48,18 @@ class VainAPI:
         }
         return self.request(url, params)
 
-    def single_player(self, reg, ign):
+    def single_player(self, reg, ign, debug=False):
+        # 0.8s
+
         url = f'https://api.dc01.gamelockerapp.com/shards/{reg}/players'
         params = {
             'filter[playerNames]': [ign],
         }
         res = self.request(url, params)
+        if debug:
+            with open('./tmp', 'w') as f:
+                json.dump(res, f, indent=4)
+            return res
         if res.get('errors', ''):
             wrapped = res
         else:
@@ -140,6 +146,11 @@ class VainAPI:
                     shard=i['attributes']['shardId'],
                     elo=i['attributes']['stats'].get(
                         'rankPoints', {'ranked': 0})['ranked'],
+                    elo_3v3=i['attributes']['stats'].get(
+                        'rankPoints', {'ranked': 0})['ranked'],
+                    elo_5v5=i['attributes']['stats'].get(
+                        'rankPoints', {'ranked_5v5': 0})['ranked_5v5'],
+                    # skillTier only represent 3v3
                     tier=i['attributes']['stats'].get('skillTier', 0),
                     wins=i['attributes']['stats'].get('wins', 0),
                 )

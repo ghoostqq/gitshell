@@ -4,3 +4,4 @@ example*.json
 example*.js
 examples/
 vainlab/migrations/*
+tmp
