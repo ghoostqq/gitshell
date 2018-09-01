@@ -69,7 +69,6 @@ class VainAPI:
                 'time': _attributes['createdAt'],
                 'shrd': _attributes['shardId'],
                 'name': _attributes['name'],
-                'elo8': _attributes['stats']['elo_earned_season_8'],
                 'wstr': _attributes['stats']['winStreak'],
                 'lstr': _attributes['stats']['lossStreak'],
                 'wins': _attributes['stats']['wins'],
@@ -144,8 +143,6 @@ class VainAPI:
                     name=i['attributes']['name'],
                     # slug=i['attributes']['name'],
                     shard=i['attributes']['shardId'],
-                    elo=i['attributes']['stats'].get(
-                        'rankPoints', {'ranked': 0})['ranked'],
                     elo_3v3=i['attributes']['stats'].get(
                         'rankPoints', {'ranked': 0})['ranked'],
                     elo_5v5=i['attributes']['stats'].get(

@@ -51,7 +51,7 @@ def play_log(request, name):
 
     # See if name is in Player
     # If exists, return Player and its Participant list
-    # If not, use api to request Player
+    # If not (means first visit), use api to request Player
 
 
 def player_matches(request, name):

@@ -19,14 +19,13 @@ class Player(m.Model):
     name = m.CharField(max_length=50, db_index=True)
     shard = m.CharField('region', max_length=10)
 
-    elo = m.PositiveSmallIntegerField(default=0)  # 0 to 32767
-    elo_3v3 = m.PositiveSmallIntegerField(default=0)
-    elo_5v5 = m.PositiveSmallIntegerField(default=0)
-    tier = m.PositiveSmallIntegerField(default=0)
-    wins = m.PositiveIntegerField(default=0)
+    elo_3v3 = m.PositiveSmallIntegerField(null=True, default=0)
+    elo_5v5 = m.PositiveSmallIntegerField(null=True, default=0)
+    tier = m.PositiveSmallIntegerField(null=True, default=0)
+    wins = m.PositiveIntegerField(null=True, default=0)
 
-    last_update_at = m.DateTimeField(
-        'last time searched for matches', default=timezone.now() - datetime.timedelta(minutes=1))
+    # last time searched for matches
+    last_update_at = m.DateTimeField(null=True)
 
     def __str__(self):
         return self.name
@@ -58,7 +57,10 @@ class Player(m.Model):
         return str(self.tier)
 
     def spent_enough_cooldown_time(self):
-        return self.last_update_at < (timezone.now() - datetime.timedelta(minutes=1))
+        if not self.last_update_at:
+            return True
+        else:
+            return self.last_update_at < (timezone.now() - datetime.timedelta(minutes=1))
 
     def updated_now(self):
         self.last_update_at = timezone.now()
