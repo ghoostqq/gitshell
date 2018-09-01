@@ -31,6 +31,29 @@ class Player(m.Model):
     def __str__(self):
         return self.name
 
+    def save(self, *args, **kwargs):
+        # Before save
+        if True:
+            self.tier = self.elo_to_tier(max(self.elo_3v3, self.elo_5v5))
+        # Default save
+        super(Player, self).save(*args, **kwargs)
+        # After save
+
+    def elo_to_tier(self, elo):
+        if elo < 1090:
+            tier = elo // 109
+        elif elo < 1200:
+            tier = 10
+        elif elo < 1400:
+            tier = 11 + (elo - 1200) // 50
+        elif elo < 2000:
+            tier = 15 + (elo - 1400) // 66.66
+        elif elo < 2400:
+            tier = 24 + (elo - 2000) // 133.33
+        else:
+            tier = 27 + (elo - 2400) // 200
+        return tier
+
     def tier_str(self):
         return str(self.tier)
 
