@@ -39,6 +39,7 @@ class Player(m.Model):
         # After save
 
     def elo_to_tier(self, elo):
+        # source: https://brokenmyth.net/skill-tier-point-far-next-tier/
         if elo < 1090:
             tier = elo // 109
         elif elo < 1200:
