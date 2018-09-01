@@ -52,7 +52,7 @@ def play_log(request, name):
     # See if name is in Player
     # If exists, get the Player
     # If not (means first visit), use api to request Player
-    # Then, render using the Player
+    # Then, use the Player to return and render
     # At the same time, use api to request Matches
     # Then return json, while saving to the db
 
