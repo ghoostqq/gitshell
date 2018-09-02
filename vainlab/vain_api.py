@@ -79,9 +79,9 @@ class VainAPI:
                 'name': res['data'][0]['attributes']['name'],
                 'shard': res['data'][0]['attributes']['shardId'],
 
-                'elo_3v3': res['data'][0]['attributes']['stats']['rankPoints']['ranked'],
-                'elo_5v5': res['data'][0]['attributes']['stats']['rankPoints']['ranked_5v5'],
-                'wins': res['data'][0]['attributes']['stats']['wins'],
+                'elo_3v3': res['data'][0]['attributes']['stats']['rankPoints'].get('ranked', 0),
+                'elo_5v5': res['data'][0]['attributes']['stats']['rankPoints'].get('ranked_5v5', 0),
+                'wins': res['data'][0]['attributes']['stats'].get('wins', 0),
             }
         }]
         return serialized

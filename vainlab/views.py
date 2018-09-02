@@ -1,6 +1,8 @@
 import json
 from threading import Thread
 
+from django.core import serializers
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import DetailView, ListView
@@ -55,11 +57,15 @@ def play_log(request, name):
     # Then, use the Player to return and render
     # At the same time, use api to request Matches
     # Then return json, while saving to the db
-    if Player.objects.filter(name=name).exists():
+    try:
         player = Player.objects.get(name=name)
-    else:
+    except ObjectDoesNotExist:
         # api
-        pass
+        res = vg.json_player(name)
+        for des in serializers.deserialize('json', json.dumps(res)):
+            player = des.object
+            player.save()
+    return render(request, 'vainlab/player.html', {'player': player, 'form': form})
 
 
 def player_matches(request, name):
