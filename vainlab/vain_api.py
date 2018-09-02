@@ -39,6 +39,9 @@ class VainAPI:
         return requests.get(url, headers=headers, params=params).json()
 
     def _request_player_matches(self, ign, reg):
+        return self._request_matches(ign, reg)
+
+    def _request_matches(self, ign, reg):
         # 50 => 1.3s
         # 10 => 0.9s
         url = f'https://api.dc01.gamelockerapp.com/shards/{reg}/matches'
@@ -86,8 +89,9 @@ class VainAPI:
         }]
         return serialized
 
-    def json_matches(self):
-        pass
+    def json_matches(self, ign, reg):
+        res = self._request_matches(ign, reg)
+        return res
 
     def single_player(self, ign, reg, debug=False):
         res = self._request_player(ign, reg)

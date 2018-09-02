@@ -3,7 +3,7 @@ from threading import Thread
 
 from django.core import serializers
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import DetailView, ListView
 
@@ -66,6 +66,11 @@ def play_log(request, name):
             player = des.object
             player.save()
     return render(request, 'vainlab/player.html', {'player': player, 'form': form})
+
+
+def _play_log_matches(request, name, shard):
+    res = vg.json_matches(name, shard)
+    return JsonResponse(res)
 
 
 def player_matches(request, name):
