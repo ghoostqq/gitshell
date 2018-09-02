@@ -38,7 +38,7 @@ class VainAPI:
         }
         return requests.get(url, headers=headers, params=params).json()
 
-    def _request_player_matches(self, reg, ign):
+    def _request_player_matches(self, ign, reg):
         # 50 => 1.3s
         # 10 => 0.9s
         url = f'https://api.dc01.gamelockerapp.com/shards/{reg}/matches'
@@ -48,7 +48,7 @@ class VainAPI:
         }
         return self.request(url, params)
 
-    def _request_player(self, reg, ign):
+    def _request_player(self, ign, reg):
         # 0.8s
         url = f'https://api.dc01.gamelockerapp.com/shards/{reg}/players'
         params = {
@@ -58,10 +58,10 @@ class VainAPI:
 
     def _cross_request_player(self, ign, reg=None):
         if reg:
-            res = self._request_player(reg, ign)
+            res = self._request_player(ign, reg)
         else:
             for reg in SHARDS:
-                res = self._request_player(reg, ign)
+                res = self._request_player(ign, reg)
                 if res is not dict:
                     break
                 elif res.get('errors', ''):
@@ -89,8 +89,8 @@ class VainAPI:
     def json_matches(self):
         pass
 
-    def single_player(self, reg, ign, debug=False):
-        res = self._request_player(reg, ign)
+    def single_player(self, ign, reg, debug=False):
+        res = self._request_player(ign, reg)
         if debug:
             with open('./tmp', 'w') as f:
                 json.dump(res, f, indent=4)
@@ -113,8 +113,8 @@ class VainAPI:
             }
         return wrapped
 
-    def player_matches(self, reg, ign, debug=False):
-        res = self._request_player_matches(reg, ign)
+    def player_matches(self, ign, reg, debug=False):
+        res = self._request_player_matches(ign, reg)
 
         if debug:
             with open('./tmp', 'w') as f:
@@ -222,8 +222,8 @@ class VainAPI:
         return
 
     def _request_without_region(self, ign, method):
-        for r in SHARDS:
-            res = method(r, ign)
+        for reg in SHARDS:
+            res = method(ign, reg)
             if res is not dict:
                 break
             elif res.get('errors', ''):

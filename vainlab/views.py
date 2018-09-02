@@ -73,7 +73,7 @@ def player_matches(request, name):
     # APIリクエストを送る
     player = Player.objects.get(name=name)
     if player.spent_enough_cooldown_time():
-        err = vg.player_matches(player.shard, player.name)
+        err = vg.player_matches(player.name, player.shard)
         player.updated_now()
         if err:
             return render(request, 'vainlab/player_matches.html', {'error': err, 'form': form})
