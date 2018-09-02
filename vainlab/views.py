@@ -69,8 +69,12 @@ def play_log(request, name):
 
 
 def _play_log_matches(request, name, shard):
-    res = vg.json_matches(name, shard)
-    return JsonResponse({'res': res})
+    matches, rosters, players, participants = vg.json_matches(name, shard)
+    des_participant_list = [pa for pa
+                            in serializers.deserialize('json', json.dumps(participants))]
+    participant_list = [pa.object for pa in des_participant_list]
+    return render(request, 'vainlab/participant_list.html',
+                  {'participant_list': participant_list})
 
 
 def player_matches(request, name):
