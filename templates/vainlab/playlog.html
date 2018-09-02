@@ -17,6 +17,7 @@
     <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
     <script src="{% static 'js/app.js' %}"></script>
     <script>
+$('#btn').on('click', function(e){
   e.preventDefault();
   console.log('clicked');
   var input = $.trim($(this).val());
