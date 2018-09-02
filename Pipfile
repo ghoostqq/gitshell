@@ -14,6 +14,7 @@ ipython = "*"
 celery = "*"
 django-celery-results = "*"
 redis = "*"
+django-bulk-update = "*"
 
 [dev-packages]
 
