@@ -65,7 +65,14 @@ def play_log(request, name):
         for des in serializers.deserialize('json', json.dumps(res)):
             player = des.object
             player.save()
-    return render(request, 'vainlab/player.html', {'player': player, 'form': form})
+    return render(request, 'vainlab/playlog.html', {'player': player, 'form': form})
+
+
+def ajax_play_log(request, name, shard):
+    if not request.is_ajax():
+        return JsonResponse({'error': 'Not ajax'})
+    matches, rosters, players, participants = vg.json_matches(name, shard)
+    return JsonResponse({'matches': matches})
 
 
 def _play_log_matches(request, name, shard):

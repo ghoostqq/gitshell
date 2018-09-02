@@ -29,6 +29,8 @@ urlpatterns = [
     path('playlog/<str:name>/', views.play_log, name='play_log'),
     path('playlog-matches/<str:name>/<str:shard>/',
          views._play_log_matches, name='play_log_matches'),
+    path('ajax/play_log/<str:name>/<str:shard>/',
+         views.ajax_play_log, name='ajax_play_log'),
     path('player_matches/<str:name>/',
          views.player_matches, name='player_matches'),
     path('match_telemetry/<str:match_id>/',
