@@ -55,6 +55,11 @@ def play_log(request, name):
     # Then, use the Player to return and render
     # At the same time, use api to request Matches
     # Then return json, while saving to the db
+    if Player.objects.filter(name=name).exists():
+        player = Player.objects.get(name=name)
+    else:
+        # api
+        pass
 
 
 def player_matches(request, name):

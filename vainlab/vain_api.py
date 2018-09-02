@@ -48,14 +48,49 @@ class VainAPI:
         }
         return self.request(url, params)
 
-    def single_player(self, reg, ign, debug=False):
+    def _request_player(self, reg, ign):
         # 0.8s
-
         url = f'https://api.dc01.gamelockerapp.com/shards/{reg}/players'
         params = {
             'filter[playerNames]': [ign],
         }
-        res = self.request(url, params)
+        return self.request(url, params)
+
+    def _cross_request_player(self, ign, reg=None):
+        if reg:
+            res = self._request_player(reg, ign)
+        else:
+            for reg in SHARDS:
+                res = self._request_player(reg, ign)
+                if res is not dict:
+                    break
+                elif res.get('errors', ''):
+                    continue
+                else:
+                    break
+        return res
+
+    def json_player(self, ign, reg=None):
+        res = self._cross_request_player(ign, reg)
+        serialized = [{
+            'model': 'vainlab.player',
+            'pk': res['data'][0]['id'],
+            'fields': {
+                'name': res['data'][0]['attributes']['name'],
+                'shard': res['data'][0]['attributes']['shardId'],
+
+                'elo_3v3': res['data'][0]['attributes']['stats']['rankPoints']['ranked'],
+                'elo_5v5': res['data'][0]['attributes']['stats']['rankPoints']['ranked_5v5'],
+                'wins': res['data'][0]['attributes']['stats']['wins'],
+            }
+        }]
+        return serialized
+
+    def json_matches(self):
+        pass
+
+    def single_player(self, reg, ign, debug=False):
+        res = self._request_player(reg, ign)
         if debug:
             with open('./tmp', 'w') as f:
                 json.dump(res, f, indent=4)
