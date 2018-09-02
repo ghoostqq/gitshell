@@ -22,6 +22,9 @@ ih = ItemHelper()
 
 class VainAPI:
     ''' vainglory api '''
+    # Name rule
+    # _request_<model obj>
+    # _cross_request_<model obj>
 
     def __init__(self):
         self.apikey = os.getenv("VAIN_APIKEY", "")
@@ -91,31 +94,105 @@ class VainAPI:
 
     def json_matches(self, ign, reg):
         res = self._request_matches(ign, reg)
-        return res
+        matches = list()
+        rosters = list()
+        players = list()
+        participants = list()
+        ro2m = dict()
+        # Match Telemetry relation
+        m2t = dict()
+        for i in res['included']:
+            if i['type'] == 'asset':
+                # TODO: maybe no url exeption could happen.
+                m2t[i['id']] = i['attributes']['URL']
+        # Match
+        for d in res['data']:
+            matches.append({
+                'model': 'vainlab.match',
+                'pk': d['id'],
+                'fields': {
+                    'datetime': d['attributes']['createdAt'],
+                    'mode': d['attributes']['gameMode'],
+                    'version': d['attributes']['patchVersion'],
+                    'telemetry_url': m2t[d['relationships']['assets']['data'][0]['id']],
+
+                }
+            })
+            for roster in d['relationships']['rosters']['data']:
+                ro2m[roster['id']] = d['id']
+        pa2r = dict()
+        # Roster -> Match
+        for i in res['included']:
+            if i['type'] == 'roster':
+                rosters.append({
+                    'model': 'vainlab.roster',
+                    'pk': i['id'],
+                    'fields': {
+                        'team_kill_score': i['attributes']['stats']['heroKills'],
+                        'side': i['attributes']['stats']['side'],
+                        'turret_kill': i['attributes']['stats']['turretKills'],
+                        'turret_remain': i['attributes']['stats']['turretsRemaining'],
+                        'match_id': ro2m[i['id']],
+                    }
+                })
+                for participant in i['relationships']['participants']['data']:
+                    pa2r[participant['id']] = i['id']
+        # Player
+        for i in res['included']:
+            if i['type'] == 'player':
+                players.append({
+                    'model': 'vainlab.player',
+                    'pk': i['id'],
+                    'fields': {
+                        'name': i['attributes']['name'],
+                        # slug=i['attributes']['name'],
+                        'shard': i['attributes']['shardId'],
+                        'elo_3v3': i['attributes']['stats'].get(
+                            'rankPoints', {'ranked': 0})['ranked'],
+                        'elo_5v5': i['attributes']['stats'].get(
+                            'rankPoints', {'ranked_5v5': 0})['ranked_5v5'],
+                        # skillTier only represent 3v3
+                        'tier': i['attributes']['stats'].get('skillTier', 0),
+                        'wins': i['attributes']['stats'].get('wins', 0),
+                    }
+                })
+        m2p = dict()
+        # Participant -> Roster, Player
+        for i in res['included']:
+            if i['type'] == 'participant':
+                participants.append({
+                    'model': 'vainlab.participant',
+                    'pk': i['id'],
+                    'fields': {
+                        'actor': i['attributes']['actor'],
+                        'shard': i['attributes']['shardId'],
+                        'kills': i['attributes']['stats'].get('kills', 0),
+                        'deaths': i['attributes']['stats'].get('deaths', 0),
+                        'assists': i['attributes']['stats'].get('assists', 0),
+                        # kda
+                        'gold': i['attributes']['stats'].get('gold', 0),
+                        'farm': i['attributes']['stats'].get('farm', 0),
+                        'items': json.dumps(i['attributes']['stats']
+                                            .get('items', [])[::-1][:6][::-1]),
+                        'tier': i['attributes']['stats'].get('skillTier', 0),
+                        'won': i['attributes']['stats'].get('winner', False),
+                        'player_id': i['relationships']['player']['data']['id'],
+                        'match_id': ro2m[pa2r[i['id']]],
+                        'roster_id': pa2r[i['id']],
+                    }
+                })
+                print(m2p.get(ro2m[pa2r[i['id']]], list()))
+                m2p.setdefault(ro2m[pa2r[i['id']]], []).append(
+                    i['relationships']['player']['data']['id'])
+                print(m2p)
+        # Matches =(many-to-many)=> Players
+        for m in matches:
+            m['fields']['players'] = m2p[m['pk']]
+        # return matches
+        return matches, rosters, players, participants
 
     def single_player(self, ign, reg, debug=False):
-        res = self._request_player(ign, reg)
-        if debug:
-            with open('./tmp', 'w') as f:
-                json.dump(res, f, indent=4)
-            return res
-        if res.get('errors', ''):
-            wrapped = res
-        else:
-            _attributes = res['data'][0]['attributes']
-            wrapped = {
-                'id': res['data'][0]['id'],
-                'time': _attributes['createdAt'],
-                'shrd': _attributes['shardId'],
-                'name': _attributes['name'],
-                'wstr': _attributes['stats']['winStreak'],
-                'lstr': _attributes['stats']['lossStreak'],
-                'wins': _attributes['stats']['wins'],
-                'tier': _attributes['stats']['skillTier'],
-                'rnkp': _attributes['stats']['rankPoints']['ranked'],
-                'blzp': _attributes['stats']['rankPoints']['blitz'],
-            }
-        return wrapped
+        return self.json_player(ign, reg)
 
     def player_matches(self, ign, reg, debug=False):
         res = self._request_player_matches(ign, reg)

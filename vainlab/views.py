@@ -70,7 +70,7 @@ def play_log(request, name):
 
 def _play_log_matches(request, name, shard):
     res = vg.json_matches(name, shard)
-    return JsonResponse(res)
+    return JsonResponse({'res': res})
 
 
 def player_matches(request, name):
