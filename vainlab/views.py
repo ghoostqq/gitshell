@@ -72,7 +72,7 @@ def ajax_play_log(request, name, shard):
     if not request.is_ajax():
         return JsonResponse({'error': 'Not ajax'})
     matches, rosters, players, participants = vg.json_matches(name, shard)
-    return JsonResponse({'matches': matches})
+    return JsonResponse({'participants': participants})
 
 
 def _play_log_matches(request, name, shard):

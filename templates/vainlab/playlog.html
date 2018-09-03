@@ -29,11 +29,11 @@ $('#btn').on('click', function(e){
     dataType: 'json'
   })
     .done(function(data){
-      console.log(data[0]);
-      $(data).each(function(i, participant){
+      console.log(data.participants);
+      $(data.participants).each(function(i, participant){
         $('#result').append(`
           <div>
-          ${participant.id}
+          ${participant.pk}
           </div>
           `)
       });

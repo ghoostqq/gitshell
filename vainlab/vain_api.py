@@ -152,7 +152,7 @@ class VainAPI:
                         'elo_5v5': i['attributes']['stats'].get(
                             'rankPoints', {'ranked_5v5': 0})['ranked_5v5'],
                         # skillTier only represent 3v3
-                        'tier': i['attributes']['stats'].get('skillTier', 0),
+                        # 'tier': i['attributes']['stats'].get('skillTier', 0),
                         'wins': i['attributes']['stats'].get('wins', 0),
                     }
                 })
