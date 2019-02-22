@@ -11,7 +11,7 @@
           </div>
         </div>
         <div class="mode-won">
-          <span class="mw-mode">{{ m.mode_ja }}</span>
+          <span class="mw-mode">mode</span>
           <span class="mw-won">{{ pa.won_ja }}</span>
         </div>
       </div>
@@ -49,28 +49,9 @@
             <dt>CS:</dt>
             <dd><img class="icon" src="{% static 'vainlab/icon/cs.svg' %}">{{ pa.farm }}</dd>
           </div>
-          {# <img class="icon" src="{% static 'vainlab/icon/duration.svg' %}">{{ m.duration }} #}
         </div>
 {% endif %}
 
         <!-- Rosters -->
-        <div class="rosters">
-          {% for r in m.roster_set.iterator %}
-          <div class="roster {{ r.side_class }}" style="color: {{ r.side_color }};">
-            <div class="roster-stats">
-              <p>
-              <img class="icon" src="{% static 'vainlab/icon/kills.svg' %}">{{ r.team_kill_score }}
-              <img class="icon" src="{% static 'vainlab/icon/turrets.svg' %}">{{ r.turret_kill }}
-              </p>
-            </div>
-
-            <div class="roster-participants">
-              {% for pa in r.participant_set.iterator %}
-              <i class="sprite-hero-32-{{ pa.actor_strip }}_Portrait"></i>
-              {% endfor %}
-            </div>
-          </div>
-          {% endfor %}
-        </div>
       </div>
 

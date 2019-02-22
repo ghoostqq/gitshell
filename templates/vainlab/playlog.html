@@ -1,0 +1,44 @@
+{% load static %}
+{{ player }}
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>{% block title %}Default Title{% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/app.css' %}">
+  </head>
+  <body>
+    <main>
+      <button id="btn">BTN</button>
+      <div id="result"></div>
+    </main>
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+    <script src="{% static 'js/app.js' %}"></script>
+    <script>
+$('#btn').on('click', function(e){
+  e.preventDefault();
+  console.log('clicked');
+  var input = $.trim($(this).val());
+  $.ajax({
+    url: '{% url 'ajax_play_log' name='Qiuqiu' shard='ea' %}',
+    type: 'GET',
+    processData: false,
+    contentType: false,
+    dataType: 'json'
+  })
+    .done(function(data){
+      console.log(data.participants);
+      $(data.participants).each(function(i, participant){
+        $('#result').append(`
+          <div>
+          ${participant.pk}
+          </div>
+          `)
+      });
+    })
+});
+  </script>
+  </body>
+</html>

@@ -43,7 +43,7 @@ else:
 
     DEBUG = True
 
-    ALLOWED_HOSTS = ['vainlab.localhost', 'localhost']
+    ALLOWED_HOSTS = ['vainlab.localhost', 'localhost', '127.0.0.1']
 
     INTERNAL_IPS = (
         '127.0.0.1',
@@ -53,8 +53,8 @@ else:
 # Application definition
 
 INSTALLED_APPS = [
-    'listter',
     'vainlab',
+    'django_extensions',
     # 'django.contrib.sites',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -75,7 +75,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'gitshell.urls'
+ROOT_URLCONF = 'core.urls'
 # SUBDOMAIN_URLCONFS = {
 #     None: 'gitshell.urls',
 #     'vainlab': 'gitshell.urls.vainlab',
@@ -97,7 +97,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'gitshell.wsgi.application'
+WSGI_APPLICATION = 'core.wsgi.application'
 
 
 # Database

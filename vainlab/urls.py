@@ -20,12 +20,23 @@ from . import views
 # appname = 'vainlab'
 urlpatterns = [
     path('', views.index, name='index'),
-    # path('player/', views.player_matches, name='player_matches'),
-    path('single_player/<slug:slug>/', views.PlayerView.as_view(), name='player'),
     path('players/', views.PlayersView.as_view(), name='players'),
-    path('player/<str:name>/',
+    path('player/<slug:slug>/', views.PlayerView.as_view(), name='player'),
+    path('matches/', views.MatchesView.as_view(), name='matches'),
+    path('match/<slug:slug>/', views.MatchView.as_view(), name='match'),
+    path('participants/', views.ParticipantsView.as_view(), name='participants'),
+
+    path('playlog/<str:name>/', views.play_log, name='play_log'),
+    path('playlog-matches/<str:name>/<str:shard>/',
+         views._play_log_matches, name='play_log_matches'),
+    path('ajax/play_log/<str:name>/<str:shard>/',
+         views.ajax_play_log, name='ajax_play_log'),
+    path('player_matches/<str:name>/',
          views.player_matches, name='player_matches'),
+    path('match_telemetry/<str:match_id>/',
+         views.match_telemetry, name='match_telemetry'),
+    path('match_telemetry/<str:match_id>/<str:actor>/', views.match_telemetry_participant_items,
+         name='match_telemetry_participant_items'),
     path('search_player/', views.search_player, name='search_player'),
-    # path('form/', views.form, name='form'),
     path('rankings/', views.ranking, name='rankings'),
 ]
