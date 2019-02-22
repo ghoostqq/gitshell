@@ -4,12 +4,12 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-django = "*"
+django = ">=2.1.6"
 django-extensions = "*"
 django-background-tasks = "*"
 django-pandas = "*"
 werkzeug = "*"
-requests = "*"
+requests = ">=2.20.0"
 ipython = "*"
 celery = "*"
 django-celery-results = "*"
