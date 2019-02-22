@@ -122,3 +122,5 @@ dmypy.json
 .pyre/
 
 vainlab/migrations/*
+
+examples/
